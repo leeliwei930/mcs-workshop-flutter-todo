@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
       extendBodyBehindAppBar: false,
       appBar:    AppBanner(
         toolbarWidth: MediaQuery.of(context).size.width * .90,
-        toolbarHeight: MediaQuery.of(context).size.height * .40,
+        toolbarHeight: MediaQuery.of(context).size.height * .42,
         header: AppTitle(),
         content: RichText(
           text: TextSpan(

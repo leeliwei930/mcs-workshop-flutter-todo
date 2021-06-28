@@ -42,13 +42,14 @@ class _AppBannerState extends State<AppBanner> {
     }
     print(widget.preferredSize);
     return  SafeArea(
-      child: PreferredSize(child: Flex(
+      child: PreferredSize(child: Wrap(
 
         direction: Axis.horizontal,
         children: [
           Container(
               constraints: BoxConstraints(
-                  maxWidth: widget.preferredSize.width
+                  maxWidth: widget.preferredSize.width,
+                minHeight: widget.preferredSize.height
               ),
               width: widget.preferredSize.width,
               padding: EdgeInsets.all(25),
