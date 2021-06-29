@@ -13,6 +13,7 @@ class Tabs extends StatefulWidget {
 
 class _TabsState extends State<Tabs> {
 
+  // store current active tab index
   int activeTabIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -23,20 +24,22 @@ class _TabsState extends State<Tabs> {
   }
 
   void _onTabChanged(int index){
+    // call set state to re-build this tab widgets
     setState(() {
 
       this.activeTabIndex = index;
-
+      // emit function callback with the user clicked index number
       if(this.widget.onTabChanged != null){
         this.widget.onTabChanged!(index);
       }
 
     });
   }
-
+  // take the tabs property and render all the tab item
   List<TabItem> _buildTabItems(){
     List<TabItem> tabs = List.of([]);
     widget.tabs.asMap().forEach((index, element) {
+      // evaluate the active boolean by checking the current active tab index with the iteration index
       bool isActive = this.activeTabIndex ==  index;
 
       tabs.add(

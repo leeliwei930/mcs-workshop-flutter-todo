@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+// Since Scaffold require appBar property to be an interface of PreferredSizeWidget, an override for preferredSize property is required
 
 class AppBanner extends StatefulWidget implements PreferredSizeWidget {
-  final Color? fromColor;
-  final Color? toColor;
+  final Color? fromColor; // gradient fromColor property
+  final Color? toColor; // gradient toColor property
   final double? toolbarHeight;
-  final Widget? header;
-  final Widget? content;
-  final Widget? bottom;
+  final Widget? header; // header widget slot
+  final Widget? content; // content widget slot
+  final Widget? bottom; // bottom widget slot
   final double? toolbarWidth ;
    AppBanner({Key? key, this.fromColor, this.toColor, this.toolbarHeight, this.header, this.content, this.bottom, this.toolbarWidth}) : super(key: key);
   Size get preferredSize {
     return Size(
-      this.toolbarWidth ?? double.infinity,
+      this.toolbarWidth ?? double.infinity, // if there is a toolbarWidth specify in named arguments, we will take that, else fallback to default value
       this.toolbarHeight ?? kToolbarHeight
     );
   }
@@ -40,7 +41,6 @@ class _AppBannerState extends State<AppBanner> {
       children.add(SizedBox(height: 15,));
       children.add(widget.bottom!);
     }
-    print(widget.preferredSize);
     return  SafeArea(
       child: PreferredSize(child: Wrap(
 

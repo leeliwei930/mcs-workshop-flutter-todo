@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo/constants/default_theme.dart';
 
 const kAppTitleTextStyle = TextStyle(
     fontSize: 20,
@@ -6,17 +7,27 @@ const kAppTitleTextStyle = TextStyle(
 );
 
 const kGreetingTextStyle = TextStyle(
-  fontSize: 24,
+  fontSize: 20,
   fontWeight: FontWeight.w500,
 );
 
 const kActiveTabTextStyle = TextStyle(
-  fontSize: 18,
+  fontSize: 16,
   fontWeight: FontWeight.w600
 );
 
 
 const kInactiveTabTextStyle = TextStyle(
-  fontSize: 14,
+  fontSize: 12,
   fontWeight: FontWeight.w500
+);
+
+const kTaskTitleTextStyle = TextStyle(
+  fontSize: 14,
+  color: taskTitleColor
+);
+
+const kTaskDueDateTextStyle = TextStyle(
+  fontSize: 12,
+  color: taskDueDateTextColor
 );
