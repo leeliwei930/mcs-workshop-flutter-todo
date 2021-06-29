@@ -7,6 +7,8 @@ const taskTitleColor = accentColor;
 
 const taskDueDateTextColor = Color(0xFF9CA3AF);
 
+const dangerColor = Colors.redAccent;
+const warningColor = Colors.amber;
 ThemeData lightTheme =  ThemeData(
   primaryColor: primaryColor,
     accentColor: accentColor,

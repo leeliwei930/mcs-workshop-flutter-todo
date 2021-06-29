@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:todo/constants/default_theme.dart';
 import 'package:todo/constants/text_styles.dart';
 
 class TaskListItem extends StatefulWidget {
-
+  final Key key;
   final String title;
   final bool completed;
   final String? dueDate;
+  final Function? onChanged;
+  final Function? onDelete;
+  final Function? onUpdate;
+  final Function? onBrowse;
 
 
 
-  const TaskListItem({Key? key , required this.title, required this.completed, this.dueDate}) : super(key: key);
+  const TaskListItem({required this.key , required this.title, required this.completed, this.dueDate, this.onChanged, this.onDelete, this.onUpdate, this.onBrowse}) : super(key: key);
 
 
   @override
@@ -18,44 +23,99 @@ class TaskListItem extends StatefulWidget {
 }
 
 class _TaskListItemState extends State<TaskListItem> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+  void closeSlide(BuildContext context){
+    if(Slidable.of(context) != null){
+      setState(() {
+        Slidable.of(context)!.close();
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.only(left: 16),
-      leading: Checkbox(
-        value: widget.completed,
-        shape: CircleBorder(),
-        onChanged: (bool? value){
-          setState(() {
-            print(value);
-          });
-        },
-      ),
-      title: Text(widget.title, style: kTaskTitleTextStyle,),
-      subtitle: Column(
-          children: [
-            Row(
+    return Slidable(
+
+      actionExtentRatio: 1 / 5,
+      closeOnScroll: true,
+      actionPane: SlidableScrollActionPane(),
+
+      secondaryActions: [
+        IconSlideAction(
+
+          color: warningColor,
+          foregroundColor: textColor,
+          icon: Icons.edit,
+          onTap: (){
+            if(widget.onUpdate != null){
+              widget.onUpdate!();
+            }
+          },
+        ),
+        IconSlideAction(
+
+            color: dangerColor,
+            foregroundColor: Colors.white,
+            icon: Icons.close,
+            onTap: (){
+              if(widget.onDelete != null){
+                widget.onDelete!();
+              }
+            }
+        )
+
+
+      ],
+      child: Builder(
+        builder: (context){
+
+          return ListTile(
+            onTap: (){
+              closeSlide(context);
+              if(widget.onBrowse != null){
+                widget.onBrowse!();
+              }
+            },
+            leading: Checkbox(
+              value: widget.completed,
+              shape: CircleBorder(),
+              onChanged: (bool? value){
+                if(widget.onChanged != null){
+                  setState(() {
+                    widget.onChanged!(value);
+                  });
+                }
+              },
+            ),
+            title: Text(widget.title, style: kTaskTitleTextStyle,),
+            subtitle: Column(
+
               children: [
-                Icon(Icons.calendar_today, color: taskDueDateTextColor, size: 12,),
-                SizedBox(
-                  width: 10,
+                Row(
+                  children: [
+                    Icon(Icons.calendar_today, color: taskDueDateTextColor, size: 12,),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(widget.dueDate ?? "", style: kTaskDueDateTextStyle,)
+                  ],
                 ),
-                Text(widget.dueDate ?? "", style: kTaskDueDateTextStyle,)
+
               ],
             ),
-            Container(
-              padding: EdgeInsets.only(top: 25),
-              decoration:  BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: .25)
-                  )
-              ),
 
-            )
-          ],
-      ),
-      isThreeLine: true,
+            dense: true,
+            isThreeLine: true,
 
+          );
+        },
+      )
     );
   }
 }

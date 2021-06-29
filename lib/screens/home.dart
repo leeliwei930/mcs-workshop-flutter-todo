@@ -40,16 +40,24 @@ class _HomeState extends State<Home> {
     // TODO: implement initState
     super.initState();
     this.tasks = [
-      Task(title: "Learn NodeJS",
+      Task(
+          id: "1",
+          title: "Learn NodeJS",
           completed: true,
           dueDate: DateTime.now().add(Duration(days: 1))),
-      Task(title: "Develop API",
+      Task(
+          id: "2",
+          title: "Develop API",
           completed: false,
           dueDate: DateTime.now().add(Duration(days: 10))),
-      Task(title: "Learn Flutter",
+      Task(
+          id: "3",
+          title: "Learn Flutter",
           completed: false,
           dueDate: DateTime.now().add(Duration(days: 2))),
-      Task(title: "Test My Code",
+      Task(
+          id: "4",
+          title: "Test My Code",
           completed: false,
           dueDate: DateTime.now().add(Duration(days: 14))),
     ];
@@ -114,8 +122,12 @@ class _HomeState extends State<Home> {
             children: [
               Expanded(
 
-                  child: ListView.builder(
-
+                  child: ListView.separated(
+                    separatorBuilder: (BuildContext context, int index){
+                      return  Divider(
+                        indent: MediaQuery.of(context).size.width * .20,
+                      );
+                    },
                 itemBuilder: buildTaskList , itemCount: currentShownTasks.length, ))
             ],
           )
@@ -131,7 +143,30 @@ class _HomeState extends State<Home> {
 
   TaskListItem buildTaskList(BuildContext context, int index){
     Task task = this.currentShownTasks[index];
-    return TaskListItem(title: task.title , completed: task.completed, dueDate: task.dueDate.toString(), );
+    return TaskListItem(
+      key: Key(task.id),
+      title: task.title ,
+      completed: task.completed,
+      dueDate: task.dueDate.toString(),
+      onChanged: (bool newVal){
+        setState((){
+          task.completed = newVal;
+        });
+      },
+      onDelete: (){
+        deleteTask(task.id);
+      },
+
+    );
   }
 
+  void deleteTask(String id){
+    int index = this.tasks.indexWhere((element) => element.id == id);
+    if(index >= 0){
+        setState((){
+          this.tasks.removeAt(index);
+        });
+    }
+
+  }
 }
