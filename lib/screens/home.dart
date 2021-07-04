@@ -6,6 +6,7 @@ import 'package:todo/components/navigations/tabs.dart';
 import 'package:todo/components/task/task_list_item.dart';
 import 'package:todo/constants/text_styles.dart';
 import 'package:todo/models/task.dart';
+import 'package:todo/screens/create_task.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -135,7 +136,9 @@ class _HomeState extends State<Home> {
 
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => null,
+        onPressed: (){
+          Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => CreateTask()));
+        },
         child: Icon(Icons.add),
       ),
     );

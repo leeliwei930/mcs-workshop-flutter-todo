@@ -68,7 +68,7 @@ class _AppBannerState extends State<AppBanner> {
                   )
               ),
               child: Column(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: children
               )

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo/constants/default_theme.dart';
 
 const kAppTitleTextStyle = TextStyle(
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: FontWeight.w500,
 );
 
