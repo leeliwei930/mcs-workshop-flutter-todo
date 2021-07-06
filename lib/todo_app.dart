@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:todo/screens/home.dart';
 
 import 'constants/default_theme.dart';
@@ -17,8 +18,9 @@ class _TodoAppState extends State<TodoApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp
     ]);
-    return MaterialApp(
+    return GetMaterialApp(
       theme: lightTheme,
+      themeMode: ThemeMode.system,
       title: "Todo.",
       debugShowCheckedModeBanner: false,
 

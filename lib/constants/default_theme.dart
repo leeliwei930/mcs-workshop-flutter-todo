@@ -11,9 +11,15 @@ const dangerColor = Colors.redAccent;
 const warningColor = Colors.amber;
 ThemeData lightTheme =  ThemeData(
   primaryColor: primaryColor,
-    accentColor: accentColor,
+  accentColor: accentColor,
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     foregroundColor: textColor,
     backgroundColor: primaryColor,
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      primary: accentColor,
+    ),
+  )
+
 );

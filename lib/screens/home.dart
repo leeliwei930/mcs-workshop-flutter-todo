@@ -7,6 +7,7 @@ import 'package:todo/components/task/task_list_item.dart';
 import 'package:todo/constants/text_styles.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/screens/create_task.dart';
+import 'package:todo/screens/edit_task.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -71,7 +72,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar:    AppBanner(
-        toolbarWidth: MediaQuery.of(context).size.width * .90,
+        toolbarWidth: MediaQuery.of(context).size.width,
         toolbarHeight: MediaQuery.of(context).size.height * .35,
         header: AppTitle(),
         content: RichText(
@@ -158,6 +159,13 @@ class _HomeState extends State<Home> {
       },
       onDelete: (){
         deleteTask(task.id);
+      },
+      onUpdate: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
+          return EditTask(
+            task: task,
+          );
+        }));
       },
 
     );

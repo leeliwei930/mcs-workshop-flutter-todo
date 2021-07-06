@@ -22,7 +22,7 @@ class AppBanner extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _AppBannerState extends State<AppBanner> {
-  
+
 
 
   @override
@@ -54,10 +54,7 @@ class _AppBannerState extends State<AppBanner> {
               width: widget.preferredSize.width,
               padding: EdgeInsets.all(25),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(25),
-                      bottomRight: Radius.circular(25)
-                  ),
+
                   gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
