@@ -17,14 +17,19 @@ class TasksProvider extends GetConnect {
     } else {
       httpClient.baseUrl = dotenv.env['STRAPI_PRODUCTION_ENDPOINT'];
     }
+    httpClient.errorSafety = false;
   }
 
   Future<Task?> findTask(String id) async {
     try {
       Response response = await httpClient.get('/tasks/$id');
+
       Task task = Task.fromJson(response.body);
       return Future.value(task);
+
+
     } catch ( exception, stackTrace){
+        //exception can be GetHttpException or SocketException
         Future.error(exception, stackTrace);
     }
   }

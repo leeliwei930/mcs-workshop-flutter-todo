@@ -28,7 +28,7 @@ class _EditTaskState extends State<EditTask> {
             direction: Axis.vertical,
             children: [
               TaskForm(
-                submitButtonText: "Edit Task",
+                submitButtonText: "Save",
                 initialValue: widget.task,
               ),
             ],

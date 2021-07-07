@@ -38,4 +38,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <!--  Allow talk to Strapi API Server  -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

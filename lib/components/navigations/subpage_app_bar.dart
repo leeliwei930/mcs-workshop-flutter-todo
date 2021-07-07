@@ -51,7 +51,10 @@ class SubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
                 ),
-                Text(title, style: kAppTitleTextStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),)
+                Padding(
+                  padding: EdgeInsets.all(5                                                                                                                                                                                                                                                                          ),
+                  child: Text(title, style: kAppTitleTextStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+                )
               ],
             ),
           ),

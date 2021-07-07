@@ -1,0 +1,50 @@
+
+import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
+class AuthProvider extends GetConnect {
+  @override
+  void onInit() {
+    if(kDebugMode){
+      httpClient.baseUrl = dotenv.env['STRAPI_DEBUG_ENDPOINT'];
+    } else {
+      httpClient.baseUrl = dotenv.env['STRAPI_PRODUCTION_ENDPOINT'];
+    }
+
+    httpClient.errorSafety = false;
+  }
+
+  void setHttpAuthorizationHeader(String token){
+    httpClient.addRequestModifier((Request request) async {
+      // Set the header
+      request.headers['Authorization'] = "Bearer $token";
+      return request;
+    });
+  }
+
+  Future<Response> login({ identifier: String, password: String}) async {
+    Map<String, String> body = {
+      "identifier" : identifier,
+      "password" : password
+    };
+    return post('/auth/local', body);
+  }
+
+  Future<Response> registerUsingEmail({username: String, email: String, password: String}) async {
+    Map<String, String> body = {
+      "username" : username,
+      "email" : email,
+      "password" : password
+    };
+    return post('/auth/local/register', body);
+  }
+
+  Future<Response> getUserUsingToken(String token){
+
+    return get('/users/me', headers: {
+      "Authorization" : "Bearer $token"
+    });
+
+  }
+}

@@ -35,6 +35,8 @@ dependencies:
   form_field_validator: ^1.1.0
   get: ^4.1.4
   flutter_dotenv: ^5.0.0
+  shared_preferences: ^2.0.6
+  flutter_secure_storage: ^4.2.0
 
 dev_dependencies:
   flutter_test:

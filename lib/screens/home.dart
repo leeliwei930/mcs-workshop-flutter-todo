@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:todo/components/app_banner.dart';
 import 'package:todo/components/brand/app_title.dart';
 import 'package:todo/components/navigations/tab_item.dart';
@@ -8,6 +9,7 @@ import 'package:todo/constants/text_styles.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/screens/create_task.dart';
 import 'package:todo/screens/edit_task.dart';
+import 'package:todo/screens/settings_page.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -68,13 +70,24 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
 
-
     return Scaffold(
       extendBodyBehindAppBar: false,
       appBar:    AppBanner(
         toolbarWidth: MediaQuery.of(context).size.width,
         toolbarHeight: MediaQuery.of(context).size.height * .35,
-        header: AppTitle(),
+        header: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            AppTitle(),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: ()=> Get.to( () => SettingsPage()), icon: Icon(Icons.settings, color: Colors.white,))
+              ],
+            )
+          ],
+        ),
         content: RichText(
           text: TextSpan(
               text: "Hello.\n",

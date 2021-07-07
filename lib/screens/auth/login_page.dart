@@ -1,0 +1,83 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
+import 'package:todo/components/app_banner.dart';
+import 'package:todo/components/brand/app_title.dart';
+import 'package:get/get.dart';
+import 'package:todo/components/forms/login_form.dart';
+import 'package:todo/constants/text_styles.dart';
+import 'package:todo/models/user.dart';
+import 'package:todo/services/auth_service.dart';
+
+import '../home.dart';
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  late final AuthService authService;
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    this.authService = Get.find<AuthService>();
+
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar:  AppBanner(
+          toolbarWidth: MediaQuery.of(context).size.width,
+          toolbarHeight: MediaQuery.of(context).size.height * .25,
+          content: AppTitle(),
+          bottom:Text("please_login".tr, style: kAppTitleTextStyle.copyWith(fontSize: 24),),
+
+      ),
+
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.all(15),
+            child:  LoginForm(
+                formKey: formKey,
+                onSubmit: (data) async {
+                  await this.onLogin(data);
+              },
+            ),
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: this.submitForm,
+        child: Icon(Icons.arrow_forward_outlined),
+      ),
+    );
+  }
+
+  void submitForm(){
+    if(this.formKey.currentState!.validate()){
+      this.formKey.currentState!.save();
+    }
+  }
+
+  Future<void> onLogin(loginFormData) async {
+    try {
+      await authService.loginUsingPassword(
+          loginFormData['identifier'], loginFormData['password']);
+      Get.to(() => Home());
+    } catch (error){
+      if(error is SocketException){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("network_error".tr)));
+      } else  if(error is GetHttpException){
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message.tr)));
+      }
+    }
+  }
+}
