@@ -6,6 +6,7 @@ import 'package:todo/components/navigations/tab_item.dart';
 import 'package:todo/components/navigations/tabs.dart';
 import 'package:todo/components/task/task_list_item.dart';
 import 'package:todo/constants/text_styles.dart';
+import 'package:todo/controllers/tasks_controller.dart';
 import 'package:todo/models/task.dart';
 import 'package:todo/screens/create_task.dart';
 import 'package:todo/screens/edit_task.dart';
@@ -19,7 +20,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  late TasksController tasksController;
  List<Task> tasks = List.of([]);
   int selectedTaskStatus = 0;
 
@@ -43,6 +44,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    this.tasksController = Get.put(TasksController()..onInit());
     this.tasks = [
       Task(
           id: "1",

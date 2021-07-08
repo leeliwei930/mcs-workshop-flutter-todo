@@ -77,7 +77,6 @@ class AuthService extends GetxService {
         this.user = user.obs;
         this.isAuthenticated.value = true;
         this.isLoading.value = false;
-
         return Future.value(user);
       }
       throw GetHttpException("incorrect_account_credentials");

@@ -1,7 +1,15 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:todo/components/forms/task_form.dart';
 
 import 'package:todo/components/navigations/subpage_app_bar.dart';
+import 'package:todo/controllers/tasks_controller.dart';
+import 'package:todo/exceptions/task_form_exception.dart';
+import 'package:todo/exceptions/toast_exception.dart';
 import 'package:todo/models/task.dart';
 class CreateTask extends StatefulWidget {
   const CreateTask({Key? key}) : super(key: key);
@@ -12,17 +20,24 @@ class CreateTask extends StatefulWidget {
 
 class _CreateTaskState extends State<CreateTask> {
 
-  bool isLoading = false;
+  late TasksController controller;
+  FormError? formError  ;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this.controller = Get.find<TasksController>();
+  }
 
   void submitForm(Task task) async  {
-    setState(() {
-      this.isLoading = true;
-    });
-      await Future.delayed(Duration(seconds: 3));
-    print(task);
-    setState(() {
-      this.isLoading = false;
-    });
+      try {
+        await controller.createTask(task);
+      } catch (error) {
+        if(error is TaskFormException){
+          this.formError = error.formError;
+        }
+        toastException(error, context);
+      }
   }
   @override
   Widget build(BuildContext context) {
@@ -40,11 +55,12 @@ class _CreateTaskState extends State<CreateTask> {
 
             direction: Axis.vertical,
             children: [
-              TaskForm(
-                isLoading: isLoading,
-                submitButtonText: "Create Task",
-                onSubmit: submitForm
-              ),
+              Obx(() => TaskForm(
+                  isLoading: controller.createTaskLoading(),
+                  submitButtonText: "Create Task",
+                  onSubmit: submitForm,
+                  formError: formError,
+              ),)
             ],
           ),
         )

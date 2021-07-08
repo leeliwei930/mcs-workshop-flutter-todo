@@ -4,6 +4,7 @@ import 'package:todo/constants/default_theme.dart';
 import 'package:todo/constants/input_border.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/exceptions/task_form_exception.dart';
 import 'package:todo/models/task.dart';
 
 class TaskForm extends StatefulWidget {
@@ -12,7 +13,8 @@ class TaskForm extends StatefulWidget {
   final Function? onSubmitFailed;
   final Task? initialValue;
   final bool isLoading;
-  const TaskForm({Key? key, required this.submitButtonText, this.onSubmit,  this.onSubmitFailed, this.initialValue, this.isLoading = false}) : super(key: key);
+  final FormError? formError;
+  const TaskForm({Key? key, required this.submitButtonText, this.onSubmit,  this.onSubmitFailed, this.initialValue, this.isLoading = false, this.formError}) : super(key: key);
 
   @override
   _TaskFormState createState() => _TaskFormState();
@@ -59,16 +61,19 @@ class _TaskFormState extends State<TaskForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
+
                   enabled: !widget.isLoading,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   onSaved: (val){
                     value.title = val ?? "";
                   },
                   validator: (val){
-
+                    if(widget.formError != null){
+                      return widget.formError!.first("title");
+                    }
                     var titleValidator = MultiValidator([
                       RequiredValidator(errorText: 'Title field is required'),
-                      LengthRangeValidator(min: 3, max: 255, errorText: "Title field is must be between 3 to 255 characters.")
+                      LengthRangeValidator(min: 3, max: 255, errorText: "Title field is must be between 3 to 255 characters."),
                     ]);
                     var isValid = titleValidator.isValid(val);
                     this.hasFieldsError = !isValid;
@@ -91,6 +96,9 @@ class _TaskFormState extends State<TaskForm> {
                       value.description = val;
                     },
                     validator: (val) {
+                      if(widget.formError != null){
+                        return widget.formError!.first("description");
+                      }
                       var descriptionValidator =  MultiValidator([
                         MaxLengthValidator(65535, errorText: "Description cannot be over 65535 characters.")
                       ]);
@@ -127,6 +135,11 @@ class _TaskFormState extends State<TaskForm> {
                   },
                   decoration: kTodoAppInputBorder(label: "Due At"),
                   format: DateFormat.yMEd().add_jms(),
+                  validator: (DateTime? datetime){
+                    if(widget.formError != null){
+                      return widget.formError!.first("title");
+                    }
+                  },
                   onShowPicker: (context, currentValue) async {
                     final date = await showDatePicker(
                       context: context,

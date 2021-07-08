@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -77,8 +78,12 @@ class _LoginPageState extends State<LoginPage> {
           loginFormData['identifier'], loginFormData['password']);
       Get.to(() => Home());
     } catch (error){
-      if(error is SocketException){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("network_error".tr)));
+      if(error is SocketException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("network_error".tr)));
+      } else if (error is TimeoutException) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("network_timeout_error".tr)));
       } else  if(error is GetHttpException){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message.tr)));
       } else {

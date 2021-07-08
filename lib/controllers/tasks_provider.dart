@@ -14,7 +14,7 @@ class TasksProvider extends GetConnect {
   late AuthService _authService;
 
   @override
-  void onInit() {
+  TasksProvider onInit() {
     if(kDebugMode){
       httpClient.baseUrl = dotenv.env['STRAPI_DEBUG_ENDPOINT'];
     } else {
@@ -23,18 +23,24 @@ class TasksProvider extends GetConnect {
     httpClient.errorSafety = false;
     this._authService = Get.find<AuthService>();
     if(this._authService.isAuthenticated()){
-      httpClient.addRequestModifier((Request request)  {
-        request.headers['Authorization'] = "Bearer ${this._authService.getExistingJWT()}";
+      httpClient.addRequestModifier((Request request) async {
+        request.headers['Authorization'] = "Bearer ${await this._authService.getExistingJWT()}";
         return request;
       });
     }
+    return this;
   }
 
   Future<Response> findTask(int id){
     return get('/tasks/$id');
   }
 
-  Future<Response> fetchTasks(){
+  Future<Response> fetchTasks({completed: bool}){
+    if(completed != null){
+      return get('/tasks', query: {
+        "completed" : completed
+      });
+    }
     return get('/tasks');
   }
 
