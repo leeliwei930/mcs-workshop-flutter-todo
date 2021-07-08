@@ -23,18 +23,25 @@ class TasksController extends GetxController {
     this._provider = TasksProvider().onInit();
   }
 
+  RxList<Task> get  uncompletedTasks => tasks.where((element) => !element.completed).toList().obs;
+  RxList<Task> get  completedTasks => tasks.where((element) => element.completed).toList().obs;
+
+
   Future<List<Task>> fetchAllTasks() async {
-      this.taskListLoading.value = true;
+      this.taskListLoading = true.obs;
       try {
-        Response response = await _provider.fetchTasks();
-        List<Map<String, dynamic>> data = response.body['data'];
+        this.tasks.clear();
+
+        Response response = await _provider.fetchTasks(null);
+        List<dynamic> data = response.body;
+
         data.forEach((task) {
           tasks.add(Task.fromJson(task));
         });
-        this.taskListLoading.value = false;
-        return Future.value(tasks);
+        this.taskListLoading = false.obs;
+        return Future.value(this.tasks());
       } catch (error, stackTrace) {
-        this.taskListLoading.value = false;
+        this.taskListLoading = false.obs;
         return Future.error(error, stackTrace);
       }
   }
@@ -42,13 +49,13 @@ class TasksController extends GetxController {
   Future<List<Task>>fetchCompletedTasks() async {
     this.taskListLoading.value = true;
     try {
-      Response response = await _provider.fetchTasks(completed: true);
-      List<Map<String, dynamic>> data = response.body['data'];
+      Response response = await _provider.fetchTasks(true);
+      List<dynamic> data = response.body;
       data.forEach((task) {
         tasks.add(Task.fromJson(task));
       });
       this.taskListLoading.value = false;
-      return Future.value(tasks);
+      return Future.value(this.tasks());
     } catch (error, stackTrace) {
       this.taskListLoading.value = false;
       return Future.error(error, stackTrace);
@@ -58,20 +65,20 @@ class TasksController extends GetxController {
   Future<List<Task>> fetchUncompletedTasks() async {
     this.taskListLoading.value = true;
     try {
-      Response response = await _provider.fetchTasks(completed: false);
-      List<Map<String, dynamic>> data = response.body['data'];
+      Response response = await _provider.fetchTasks(false);
+      List<dynamic> data = response.body;
       data.forEach((task) {
         tasks.add(Task.fromJson(task));
       });
       this.taskListLoading.value = false;
-      return Future.value(tasks);
+      return Future.value(this.tasks());
     } catch (error, stackTrace) {
       this.taskListLoading.value = false;
       return Future.error(error, stackTrace);
     }
   }
 
-  Future<Task> findTask(int id) async {
+  Future<Task> findTask(String id) async {
     this.taskLoading.value = true;
     try {
       Response response = await _provider.findTask(id);
@@ -86,7 +93,7 @@ class TasksController extends GetxController {
 
   }
 
-  Future<Task> updateTask(int id, Task updatedTask) async {
+  Future<Task> updateTask(String id, Task updatedTask) async {
     this.updateTaskLoading.value = true;
     try {
       Response response = await _provider.updateTask(id, updatedTask);
@@ -128,7 +135,7 @@ class TasksController extends GetxController {
     }
   }
 
-  Future<Task> deleteTask(int id) async {
+  Future<Task> deleteTask(String id) async {
     this.deleteTaskLoading.value = true;
     try {
       Response response = await _provider.deleteTask(id);

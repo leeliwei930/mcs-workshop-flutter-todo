@@ -23,7 +23,7 @@ const kInactiveTabTextStyle = TextStyle(
 );
 
 const kTaskTitleTextStyle = TextStyle(
-  fontSize: 14,
+  fontSize: 16,
   color: taskTitleColor
 );
 

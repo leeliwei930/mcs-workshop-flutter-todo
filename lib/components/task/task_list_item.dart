@@ -97,21 +97,22 @@ class _TaskListItemState extends State<TaskListItem> {
             subtitle: Column(
 
               children: [
-                Row(
-                  children: [
-                    Icon(Icons.calendar_today, color: taskDueDateTextColor, size: 12,),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(widget.dueDate ?? "", style: kTaskDueDateTextStyle,)
-                  ],
-                ),
+                if(widget.dueDate != null)
+                  Row(
+                    children: [
+                      Icon(Icons.calendar_today, color: taskDueDateTextColor, size: 12,),
+                      SizedBox(
+                        width: 10,
+                      ),
+
+                        Text(widget.dueDate!, style: kTaskDueDateTextStyle,)
+                    ],
+                  ),
 
               ],
             ),
 
-            dense: true,
-            isThreeLine: true,
+            isThreeLine: widget.dueDate != null,
 
           );
         },

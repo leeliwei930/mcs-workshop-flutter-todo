@@ -34,6 +34,7 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            initialValue: "johnsmith",
             readOnly: widget.isLoading,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
@@ -48,6 +49,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           TextFormField(
+            initialValue: "johnsmith",
             readOnly: widget.isLoading,
             onSaved: (val){
               this.loginFormData['password'] = val ?? "";

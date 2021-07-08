@@ -68,6 +68,7 @@ class AuthService extends GetxService {
   }
 
   Future<User> loginUsingPassword(String identifier, String password) async {
+
     this.isLoading.value = true;
     try {
       Response response = await this.authProvider.login(identifier: identifier, password: password);
@@ -90,6 +91,7 @@ class AuthService extends GetxService {
 
   Future<void> logout() async {
     await this.clearToken();
+    this.authProvider.unsetHttpAuthorizationHeader();
     this.user = null.obs;
   }
   Future<void> clearToken() async {

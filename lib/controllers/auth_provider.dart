@@ -23,6 +23,13 @@ class AuthProvider extends GetConnect {
     });
   }
 
+  void unsetHttpAuthorizationHeader(){
+    httpClient.addRequestModifier((Request request) async {
+      // Set the header
+      request.headers.remove('Authorization');
+      return request;
+    });
+  }
   Future<Response> login({ identifier: String, password: String}) async {
     Map<String, String> body = {
       "identifier" : identifier,

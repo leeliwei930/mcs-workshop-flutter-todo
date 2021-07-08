@@ -18,7 +18,7 @@ class _TabItemState extends State<TabItem>  with SingleTickerProviderStateMixin 
   void initState() {
     // TODO: implement initState
     super.initState();
-    this.animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 250), reverseDuration: Duration(milliseconds: 250));
+    this.animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500), reverseDuration: Duration(milliseconds: 500));
 
 
   }

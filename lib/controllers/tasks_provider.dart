@@ -31,11 +31,11 @@ class TasksProvider extends GetConnect {
     return this;
   }
 
-  Future<Response> findTask(int id){
+  Future<Response> findTask(String id){
     return get('/tasks/$id');
   }
 
-  Future<Response> fetchTasks({completed: bool}){
+  Future<Response> fetchTasks(bool? completed){
     if(completed != null){
       return get('/tasks', query: {
         "completed" : completed
@@ -44,11 +44,11 @@ class TasksProvider extends GetConnect {
     return get('/tasks');
   }
 
-  Future<Response> deleteTask(int id){
+  Future<Response> deleteTask(String id){
     return delete('/tasks/$id');
   }
 
-  Future<Response> updateTask(int id, Task updatedTask) {
+  Future<Response> updateTask(String id, Task updatedTask) {
     return put('/tasks/$id',  updatedTask.toJson());
   }
 

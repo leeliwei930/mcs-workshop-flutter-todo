@@ -8,6 +8,7 @@ import 'package:todo/components/brand/app_title.dart';
 import 'package:get/get.dart';
 import 'package:todo/components/forms/login_form.dart';
 import 'package:todo/constants/text_styles.dart';
+import 'package:todo/exceptions/toast_exception.dart';
 import 'package:todo/models/user.dart';
 import 'package:todo/services/auth_service.dart';
 
@@ -73,23 +74,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> onLogin(loginFormData) async {
-      try {
-      User user = await authService.loginUsingPassword(
-          loginFormData['identifier'], loginFormData['password']);
-      Get.to(() => Home());
-    } catch (error){
-      if(error is SocketException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("network_error".tr)));
-      } else if (error is TimeoutException) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text("network_timeout_error".tr)));
-      } else  if(error is GetHttpException){
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message.tr)));
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("unknown_error".tr)));
-        print(error);
-      }
-    }
+      return await authService.loginUsingPassword(
+          loginFormData['identifier'], loginFormData['password']).then((User user){
+            Get.off(() => Home());
+      }).catchError((error){
+          toastException(error, context);
+      });
   }
 }
