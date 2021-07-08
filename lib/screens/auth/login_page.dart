@@ -45,19 +45,23 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Container(
             padding: EdgeInsets.all(15),
-            child:  LoginForm(
-                formKey: formKey,
-                onSubmit: (data) async {
-                  await this.onLogin(data);
+            child:  Obx(() => LoginForm(
+              isLoading: authService.isLoading(),
+              formKey: formKey,
+              onSubmit: (data) async {
+                await this.onLogin(data);
               },
-            ),
+            ),)
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: this.submitForm,
-        child: Icon(Icons.arrow_forward_outlined),
-      ),
+      floatingActionButton: Obx(() => FloatingActionButton(
+        onPressed: !authService.isLoading() ? this.submitForm : null,
+        child: (authService.isLoading()) ? CircularProgressIndicator(
+          strokeWidth: 3.5,
+          color: Colors.black,
+        ) :Icon(Icons.arrow_forward_outlined),
+      ),)
     );
   }
 
@@ -68,8 +72,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> onLogin(loginFormData) async {
-    try {
-      await authService.loginUsingPassword(
+      try {
+      User user = await authService.loginUsingPassword(
           loginFormData['identifier'], loginFormData['password']);
       Get.to(() => Home());
     } catch (error){
@@ -77,6 +81,9 @@ class _LoginPageState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("network_error".tr)));
       } else  if(error is GetHttpException){
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error.message.tr)));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("unknown_error".tr)));
+        print(error);
       }
     }
   }

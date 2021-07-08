@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo/constants/default_theme.dart';
 
 const kAppTitleTextStyle = TextStyle(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w500,
 );
 
@@ -31,3 +31,10 @@ const kTaskDueDateTextStyle = TextStyle(
   fontSize: 12,
   color: taskDueDateTextColor
 );
+
+const kSectionTitle = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: accentColor
+);
+

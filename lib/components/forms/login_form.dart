@@ -6,7 +6,8 @@ class LoginForm extends StatefulWidget {
 
   final GlobalKey<FormState> formKey;
   final Function? onSubmit;
-  const LoginForm({Key? key, required this.formKey, this.onSubmit}) : super(key: key);
+  final bool isLoading;
+  const LoginForm({Key? key, required this.formKey, this.onSubmit, this.isLoading = false}) : super(key: key);
   @override
   _LoginFormState createState() => _LoginFormState();
 }
@@ -33,6 +34,9 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            readOnly: widget.isLoading,
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
             onSaved: (val){
               this.loginFormData['identifier'] = val ?? "";
             },
@@ -44,6 +48,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           TextFormField(
+            readOnly: widget.isLoading,
             onSaved: (val){
               this.loginFormData['password'] = val ?? "";
               this.emitOnSubmit();

@@ -9,8 +9,9 @@ class AuthService extends GetxService {
 
   late FlutterSecureStorage secureStore;
   late AuthProvider authProvider;
-  late Rx<User> user;
+  late Rx<User?> user;
   RxBool isAuthenticated = false.obs;
+  RxBool isLoading = false.obs;
   @override
   Future<AuthService> onInit()  async {
       this.secureStore =  new FlutterSecureStorage();
@@ -67,6 +68,7 @@ class AuthService extends GetxService {
   }
 
   Future<User> loginUsingPassword(String identifier, String password) async {
+    this.isLoading.value = true;
     try {
       Response response = await this.authProvider.login(identifier: identifier, password: password);
       if(response.isOk){
@@ -74,17 +76,23 @@ class AuthService extends GetxService {
         await this.saveToken(response.body['jwt']);
         this.user = user.obs;
         this.isAuthenticated.value = true;
+        this.isLoading.value = false;
 
         return Future.value(user);
       }
       throw GetHttpException("incorrect_account_credentials");
     } catch(error) {
       this.isAuthenticated.value = false;
+      this.isLoading.value = false;
 
       return Future.error(error);
     }
   }
 
+  Future<void> logout() async {
+    await this.clearToken();
+    this.user = null.obs;
+  }
   Future<void> clearToken() async {
     this.isAuthenticated.value = false;
 

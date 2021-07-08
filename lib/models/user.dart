@@ -7,6 +7,8 @@ class User {
   @JsonKey(name: "id")
   late int id;
 
+  @JsonKey(name: "fullname")
+  late String fullname;
   @JsonKey(name: "username")
   late String username;
 
@@ -16,14 +18,11 @@ class User {
   @JsonKey(name: "blocked")
   late bool? blocked;
 
-  User({required this.id, required this.username, required this.email, this.blocked});
+  User({required this.id, required this.username, required this.email, this.blocked, required this.fullname});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  static _parseIDToString(int val){
-    return val.toString();
-  }
 
   String toString(){
     return this.toJson().toString();
