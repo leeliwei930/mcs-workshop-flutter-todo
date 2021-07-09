@@ -9,10 +9,9 @@ import 'package:todo/todo_app.dart';
 void main() async {
   await dotenv.load(fileName: "assets/.env");
   WidgetsFlutterBinding.ensureInitialized(); // before init shared preferences instance
-
   await Get.putAsync(() => SettingService().onInit());
-  await Get.putAsync(() => AuthService().onInit());
 
+  await Get.putAsync(() => AuthService().onInit());
 
   runApp(TodoApp());
 }

@@ -44,7 +44,6 @@ class _SettingsPageState extends State<SettingsPage> {
               Obx(() => UserProfile(
                   user: authService.user(),
                   onLogout: () async {
-                    print("logout");
 
                     bool? logout = await showDialog(context: context, builder: (BuildContext context){
                       return AlertDialog(

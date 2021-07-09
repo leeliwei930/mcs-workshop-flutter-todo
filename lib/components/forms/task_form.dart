@@ -61,16 +61,12 @@ class _TaskFormState extends State<TaskForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
-
                   enabled: !widget.isLoading,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   onSaved: (val){
                     value.title = val ?? "";
                   },
                   validator: (val){
-                    if(widget.formError != null){
-                      return widget.formError!.first("title");
-                    }
+
                     var titleValidator = MultiValidator([
                       RequiredValidator(errorText: 'Title field is required'),
                       LengthRangeValidator(min: 3, max: 255, errorText: "Title field is must be between 3 to 255 characters."),
@@ -84,7 +80,7 @@ class _TaskFormState extends State<TaskForm> {
                   focusNode: FocusNode(
                       canRequestFocus: false
                   ),
-                  decoration: kTodoAppInputBorder(label: "Title")
+                  decoration: kTodoAppInputBorder(label: "Title", errorText:  widget.formError?.first("title"))
                 ),
                 SizedBox(height: 15,),
                 TextFormField(
@@ -96,9 +92,7 @@ class _TaskFormState extends State<TaskForm> {
                       value.description = val;
                     },
                     validator: (val) {
-                      if(widget.formError != null){
-                        return widget.formError!.first("description");
-                      }
+
                       var descriptionValidator =  MultiValidator([
                         MaxLengthValidator(65535, errorText: "Description cannot be over 65535 characters.")
                       ]);
@@ -110,7 +104,7 @@ class _TaskFormState extends State<TaskForm> {
                     focusNode: FocusNode(
                         canRequestFocus: false
                     ),
-                    decoration: kTodoAppInputBorder(label: "Description")
+                    decoration: kTodoAppInputBorder(label: "Description", errorText: widget.formError?.first("description"))
                 ),
               Row(
                 children: [
@@ -138,7 +132,7 @@ class _TaskFormState extends State<TaskForm> {
                   format: DateFormat.yMEd().add_jms(),
                   validator: (DateTime? datetime){
                     if(widget.formError != null){
-                      return widget.formError!.first("title");
+                      return widget.formError!.first("due_date");
                     }
                   },
                   onShowPicker: (context, currentValue) async {

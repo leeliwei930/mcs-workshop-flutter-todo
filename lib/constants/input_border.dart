@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:todo/constants/default_theme.dart';
-kTodoAppInputBorder({label: String}) {
+kTodoAppInputBorder({label: String,  String? errorText}) {
   return InputDecoration(
       contentPadding: EdgeInsets.all(8),
       labelText: label,
+      errorText: errorText,
       labelStyle: TextStyle(
           color: accentColor,
       ),

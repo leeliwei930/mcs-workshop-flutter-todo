@@ -25,7 +25,7 @@ class _EditTaskState extends State<EditTask> {
     super.initState();
     this.controller = Get.find<TasksController>();
   }
-  void submitForm(Task task) async  {
+  void submitForm(Task task) async   {
     try {
       await controller.updateTask(task.id, task);
       Get.back(result: "task_updated_success");

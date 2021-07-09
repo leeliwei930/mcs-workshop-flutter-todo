@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/components/app_banner.dart';
@@ -52,7 +54,7 @@ class _HomeState extends State<Home> {
         extendBodyBehindAppBar: false,
         appBar:    AppBanner(
             toolbarWidth: MediaQuery.of(context).size.width,
-            toolbarHeight: MediaQuery.of(context).size.height * .35,
+            toolbarHeight: MediaQuery.of(context).size.height * .40,
             header: Row(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -98,7 +100,7 @@ class _HomeState extends State<Home> {
             )
         ),
         body: Container(
-          margin: EdgeInsets.only(top: 25),
+          margin: EdgeInsets.only(top: 15),
           child: Card(
               clipBehavior: Clip.hardEdge,
               shape: RoundedRectangleBorder(
@@ -111,14 +113,19 @@ class _HomeState extends State<Home> {
               child: Flex(
                 direction: Axis.vertical,
                 children: [
-                  Obx(() => (!tasksController.taskListLoading()) ? Expanded(
-                      child: ListView.separated(
-                        separatorBuilder: (BuildContext context, int index){
-                          return  Divider(
-                            indent: MediaQuery.of(context).size.width * .20,
-                          );
+                  Obx(() => (!tasksController.taskListLoading() ) ? Expanded(
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await  tasksController.fetchAllTasks(showLoadingIndicator: false);
                         },
-                        itemBuilder: buildTaskList , itemCount: tasks().length, )
+                        child: ListView.separated(
+                          separatorBuilder: (BuildContext context, int index){
+                            return  Divider(
+                              indent: MediaQuery.of(context).size.width * .20,
+                            );
+                          },
+                          itemBuilder: buildTaskList , itemCount: tasks().length, ),
+                      )
                   ) : Center(
                     heightFactor: 2,
                     child: CircularProgressIndicator(),)
@@ -130,7 +137,11 @@ class _HomeState extends State<Home> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            String? result = await Get.to(() => CreateTask());
+            String? result = await Get.to(
+                    () => CreateTask(),
+                    transition: Transition.rightToLeftWithFade,
+                    duration: Duration(milliseconds: 500)
+            );
             if(result == "task_created_success"){
               ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text(result!.tr),)
@@ -168,9 +179,11 @@ class _HomeState extends State<Home> {
         await deleteTask(task);
       },
       onUpdate: () async {
-        String? result = await Get.to(() => EditTask(
-          task: task,
-        ));
+        String? result = await Get.to(
+          () => EditTask( task: task, ),
+          transition: Transition.rightToLeftWithFade,
+          duration: Duration(milliseconds: 500)
+        );
 
         if(result == "task_updated_success"){
           ScaffoldMessenger.of(context).showSnackBar(
@@ -183,7 +196,6 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> deleteTask(Task task) async {
-
     // prompt a dialog
     bool? delete = await showDialog(context: context, builder: (BuildContext context){
       return AlertDialog(

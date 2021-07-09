@@ -27,18 +27,23 @@ class TasksController extends GetxController {
   RxList<Task> get  completedTasks => tasks.where((element) => element.completed).toList().obs;
 
 
-  Future<List<Task>> fetchAllTasks() async {
-      this.taskListLoading = true.obs;
+  Future<List<Task>> fetchAllTasks({bool showLoadingIndicator = true}) async {
+      // allow dynamically set the loading indicator, for example loader will not show up when pull of refresh trigger
+      this.taskListLoading = showLoadingIndicator.obs;
       try {
-        this.tasks.clear();
-
+        // call the provider and fetch all the tasks, either completed or not completed
         Response response = await _provider.fetchTasks(null);
         List<dynamic> data = response.body;
+        // clear existing tasks list
+        this.tasks.clear();
 
+        // iterate each data and perform decode to Task object
         data.forEach((task) {
           tasks.add(Task.fromJson(task));
         });
+        // off the loading state
         this.taskListLoading = false.obs;
+        // resolve the future value
         return Future.value(this.tasks());
       } catch (error, stackTrace) {
         this.taskListLoading = false.obs;

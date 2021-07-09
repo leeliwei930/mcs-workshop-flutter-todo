@@ -15,6 +15,8 @@ class TodoApp extends StatefulWidget {
 
   @override
   _TodoAppState createState() => _TodoAppState();
+
+  
 }
 
 class _TodoAppState extends State<TodoApp> {
@@ -28,6 +30,7 @@ class _TodoAppState extends State<TodoApp> {
     this.settingService = Get.find<SettingService>();
     this.authService = Get.find<AuthService>();
   }
+
   @override
   Widget build(BuildContext context) {
 
@@ -35,6 +38,7 @@ class _TodoAppState extends State<TodoApp> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp
     ]);
+
     return GetMaterialApp(
       theme: lightTheme,
       themeMode: ThemeMode.system,

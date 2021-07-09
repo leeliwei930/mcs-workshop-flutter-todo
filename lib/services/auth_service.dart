@@ -49,7 +49,7 @@ class AuthService extends GetxService {
   }
 
   Future<String?> getExistingJWT() async {
-    return  await this.secureStore.read(key: "todo_jwt");
+    return await this.secureStore.read(key: "todo_jwt");
   }
 
   Future<User> getUserFromToken(String token) async {

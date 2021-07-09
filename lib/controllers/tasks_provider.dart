@@ -25,6 +25,7 @@ class TasksProvider extends GetConnect {
     if(this._authService.isAuthenticated()){
       httpClient.addRequestModifier((Request request) async {
         request.headers['Authorization'] = "Bearer ${await this._authService.getExistingJWT()}";
+
         return request;
       });
     }
