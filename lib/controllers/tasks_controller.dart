@@ -121,6 +121,8 @@ class TasksController extends GetxController {
       if(response.isOk){
         Task task = Task.fromJson(response.body);
         this.createTaskLoading.value = false;
+        // append new tasks to array
+        this.tasks.add(task);
         return Future.value(task);
 
       } else if(response.statusCode ==  HttpStatus.badRequest){

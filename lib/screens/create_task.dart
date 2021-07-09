@@ -32,7 +32,9 @@ class _CreateTaskState extends State<CreateTask> {
   void submitForm(Task task) async  {
       try {
         await controller.createTask(task);
-        Get.back();
+
+        Get.back(result: "task_created_success");
+
       } catch (error) {
         if(error is TaskFormException){
           this.formError = error.formError;

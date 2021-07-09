@@ -39,6 +39,13 @@ class _HomeState extends State<Home> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    this.tasksController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
       return Scaffold(
@@ -122,8 +129,14 @@ class _HomeState extends State<Home> {
 
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) => CreateTask()));
+          onPressed: () async {
+            String? result = await Get.to(() => CreateTask());
+            if(result == "task_created_success"){
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(result!.tr),)
+              );
+            }
+
           },
           child: Icon(Icons.add),
         ),
@@ -154,12 +167,16 @@ class _HomeState extends State<Home> {
       onDelete: (){
         deleteTask(task.id);
       },
-      onUpdate: (){
-        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context){
-          return EditTask(
-            task: task,
+      onUpdate: () async {
+        String? result = await Get.to(() => EditTask(
+          task: task,
+        ));
+
+        if(result == "task_updated_success"){
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(result!.tr),)
           );
-        }));
+        }
       },
 
     );

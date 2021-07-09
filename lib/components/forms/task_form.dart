@@ -117,9 +117,10 @@ class _TaskFormState extends State<TaskForm> {
                   Switch(
 
                     value: hasDueDate,
-                    onChanged: (value){
+                    onChanged: (val){
                       setState(() {
-                        this.hasDueDate = value;
+                        this.hasDueDate = val;
+
                       });
                     },
 
@@ -194,7 +195,7 @@ class _TaskFormState extends State<TaskForm> {
                       strokeWidth: 3.5,
                       color: Theme.of(context).accentColor,
                     ),
-                  ) : Text("Create Task"),
+                  ) : Text(widget.submitButtonText),
 
                   onPressed: hasFieldsError || widget.isLoading ? null :  (){
                     setState(() {
@@ -202,6 +203,9 @@ class _TaskFormState extends State<TaskForm> {
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
                         if(widget.onSubmit != null){
+                          if(!this.hasDueDate){
+                            value.dueDate = null;
+                          }
                           widget.onSubmit!(value) ;
                         }
                       } else {

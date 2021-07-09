@@ -24,6 +24,9 @@ Map<String, String> enUS =  <String, String>{
 
   "create_new_task" : "Create A new Task",
   "create_task" : "Create Task",
+  "task_updated_success" : "Task updated successfully!",
+  "task_created_success" : "Task created successfully!",
+
   "edit_task" : "Edit Task",
   "save" : "Save",
 
