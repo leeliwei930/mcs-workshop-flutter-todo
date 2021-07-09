@@ -48,6 +48,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     bool? logout = await showDialog(context: context, builder: (BuildContext context){
                       return AlertDialog(
+                        title: Text("logout".tr),
                         content: Text("logout_message".tr),
                         actions: [
                           TextButton(

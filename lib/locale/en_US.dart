@@ -12,10 +12,10 @@ Map<String, String> enUS =  <String, String>{
   "language" : "LANGUAGE",
 
   "please_login" : "Please Login",
-  "sign_out" : "SIGN OUT",
+  "log_out" : "LOG OUT",
+  "logout_message" : "Are you sure you want to logout?",
   "yes" : "YES",
   "no" : "NO",
-  "logout_message" : "Are you sure you want to logout?",
   "hello" : "Hello.",
   "task_summary" : "You have @uncompletedTaskCount uncompleted task, and  @completedTaskCount completed tasks.",
   "all" : "All",
@@ -26,7 +26,8 @@ Map<String, String> enUS =  <String, String>{
   "create_task" : "Create Task",
   "task_updated_success" : "Task updated successfully!",
   "task_created_success" : "Task created successfully!",
-
+  "delete_task_alert" : "Delete Task?",
+  "delete_task_message" : "Are you sure to delete this task @name ?",
   "edit_task" : "Edit Task",
   "save" : "Save",
 

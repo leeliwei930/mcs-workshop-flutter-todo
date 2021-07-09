@@ -164,8 +164,8 @@ class _HomeState extends State<Home> {
 
          });
       },
-      onDelete: (){
-        deleteTask(task.id);
+      onDelete: () async {
+        await deleteTask(task);
       },
       onUpdate: () async {
         String? result = await Get.to(() => EditTask(
@@ -182,12 +182,43 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void deleteTask(String id){
-    int index = this.tasks.indexWhere((element) => element.id == id);
-    if(index >= 0){
-      setState((){
-        this.tasks.removeAt(index);
-      });
+  Future<void> deleteTask(Task task) async {
+
+    // prompt a dialog
+    bool? delete = await showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("delete_task_alert".tr),
+        content: Text("delete_task_message".trParams({
+          "name" :  task.title
+        }) ?? ""),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text("yes".tr,
+              style: Theme.of(context).textTheme.button!.copyWith(
+                  color: Colors.redAccent
+              ),
+            ),
+
+          ),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text("no".tr,
+                style: Theme.of(context).textTheme.button!.copyWith(
+                    color: Theme.of(context).accentColor
+                ),)
+          )
+        ],
+      );
+    });
+    // if user click on delete
+    if(delete != null && delete){
+      try {
+        await tasksController.deleteTask(task.id);
+        await tasksController.fetchAllTasks();
+      } catch (error){
+        toastException(error, context);
+      }
     }
 
   }

@@ -45,7 +45,7 @@ class UserProfile extends StatelessWidget {
                   child: TextButton(
                     onPressed: () => onLogout!(),
                     child: Text(
-                      "sign_out".tr,
+                      "log_out".tr,
                       style: Theme.of(context).textTheme.button!.copyWith(
                             color:  Theme.of(context).colorScheme.error
                       ),
