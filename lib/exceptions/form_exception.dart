@@ -31,12 +31,12 @@ class FormError {
   }
 }
 
-class TaskFormException implements Exception {
+class FormException implements Exception {
 
-  String message = "task_form_validation_exception";
+  String message = "form_validation_exception";
   FormError formError = FormError();
 
-  TaskFormException(message);
+  FormException(message);
 
 
   @override

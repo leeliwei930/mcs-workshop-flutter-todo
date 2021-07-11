@@ -8,7 +8,7 @@ import 'package:todo/components/forms/task_form.dart';
 
 import 'package:todo/components/navigations/subpage_app_bar.dart';
 import 'package:todo/controllers/tasks_controller.dart';
-import 'package:todo/exceptions/task_form_exception.dart';
+import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/exceptions/toast_exception.dart';
 import 'package:todo/models/task.dart';
 class CreateTask extends StatefulWidget {
@@ -36,7 +36,7 @@ class _CreateTaskState extends State<CreateTask> {
         Get.back(result: "task_created_success");
 
       } catch (error) {
-        if(error is TaskFormException){
+        if(error is FormException){
           this.formError = error.formError;
         }
         toastException(error, context);

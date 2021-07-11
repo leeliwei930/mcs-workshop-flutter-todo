@@ -4,7 +4,7 @@ import 'package:todo/constants/default_theme.dart';
 import 'package:todo/constants/input_border.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-import 'package:todo/exceptions/task_form_exception.dart';
+import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/models/task.dart';
 
 class TaskForm extends StatefulWidget {
@@ -25,7 +25,6 @@ class _TaskFormState extends State<TaskForm> {
   late Task value;
   bool hasDueDate = false;
   bool hasFieldsError = false;
-  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
 
   @override

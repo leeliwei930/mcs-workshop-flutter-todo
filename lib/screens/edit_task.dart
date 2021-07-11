@@ -4,7 +4,7 @@ import 'package:todo/components/forms/task_form.dart';
 
 import 'package:todo/components/navigations/subpage_app_bar.dart';
 import 'package:todo/controllers/tasks_controller.dart';
-import 'package:todo/exceptions/task_form_exception.dart';
+import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/exceptions/toast_exception.dart';
 import 'package:todo/models/task.dart';
 class EditTask extends StatefulWidget {
@@ -30,7 +30,7 @@ class _EditTaskState extends State<EditTask> {
       await controller.updateTask(task.id, task);
       Get.back(result: "task_updated_success");
     } catch (error) {
-      if(error is TaskFormException){
+      if(error is FormException){
         this.formError = error.formError;
       }
       toastException(error, context);

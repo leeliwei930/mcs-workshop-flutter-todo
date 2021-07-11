@@ -2,7 +2,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:todo/controllers/auth_provider.dart';
+import 'package:todo/exceptions/form_exception.dart';
+import 'package:todo/exceptions/form_exception.dart';
+import 'package:todo/models/password_form_data.dart';
 import 'package:todo/models/user.dart';
 
 class AuthService extends GetxService {
@@ -12,6 +16,7 @@ class AuthService extends GetxService {
   late Rx<User?> user;
   RxBool isAuthenticated = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isUpdatePasswordLoading = false.obs;
   @override
   Future<AuthService> onInit()  async {
       this.secureStore =  new FlutterSecureStorage();
@@ -104,4 +109,26 @@ class AuthService extends GetxService {
     await this.secureStore.write(key: "todo_jwt", value: token);
   }
 
+  Future<User> changePassword(PasswordFormData formData) async {
+      try {
+        this.isUpdatePasswordLoading.value = true;
+        Response response = await this.authProvider.changePassword(formData);
+        if(response.isOk){
+          User user = User.fromJson(response.body['user']);
+          this.saveToken(response.body['jwt']);
+          this.user.value = user;
+          this.isUpdatePasswordLoading.value = false;
+          return Future.value(user);
+        } else if(response.statusCode ==  HttpStatus.badRequest){
+          FormException exception = FormException("validation_exception");
+          exception.formError.record(response.body['data']['errors']);
+          throw exception;
+        }
+        throw GetHttpException("server_error");
+      } catch (error){
+        this.isUpdatePasswordLoading.value = false;
+        return Future.error(error);
+      }
+
+  }
 }

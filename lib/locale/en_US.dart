@@ -30,9 +30,16 @@ Map<String, String> enUS =  <String, String>{
   "delete_task_message" : "Are you sure to delete this task @name ?",
   "edit_task" : "Edit Task",
   "save" : "Save",
-
+  // password form
+  "current_password" : "Current Password",
+  "new_password" : "New Password",
+  "confirm_new_password" : "Confirm Password",
+  "update_password" : "Update Password",
   // language setting
   "system_language" : "Based on System Language",
   "chinese" : "中文（简体）",
-  "english" : "English"
+  "english" : "English",
+
+  // error message
+  "network_error" : "Unable connect to server right now, please try again later."
 };

@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/exceptions/exceptions.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:todo/controllers/tasks_provider.dart';
-import 'package:todo/exceptions/task_form_exception.dart';
+import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/models/task.dart';
 
 class TasksController extends GetxController {
@@ -107,7 +107,7 @@ class TasksController extends GetxController {
         this.updateTaskLoading.value = false;
         return Future.value(task);
       } else if(response.statusCode ==  HttpStatus.badRequest){
-        TaskFormException exception = TaskFormException("validation_exception");
+        FormException exception = FormException("validation_exception");
         exception.formError.record(response.body['data']['errors']);
         throw exception;
       }
@@ -131,7 +131,7 @@ class TasksController extends GetxController {
         return Future.value(task);
 
       } else if(response.statusCode ==  HttpStatus.badRequest){
-        TaskFormException exception = TaskFormException("validation_exception");
+        FormException exception = FormException("validation_exception");
         exception.formError.record(response.body['data']['errors']);
         throw exception;
       }

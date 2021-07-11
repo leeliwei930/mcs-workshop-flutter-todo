@@ -74,11 +74,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> onLogin(loginFormData) async {
-      return await authService.loginUsingPassword(
-          loginFormData['identifier'], loginFormData['password']).then((User user){
-            Get.off(() => Home());
-      }).catchError((error){
-          toastException(error, context);
-      });
+    try {
+      User user =  await authService.loginUsingPassword(
+          loginFormData['identifier'], loginFormData['password']);
+      Get.off(() => Home());
+
+    }  catch (error){
+      toastException(error, context);
+
+    }
   }
 }

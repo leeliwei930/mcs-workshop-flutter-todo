@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:todo/models/password_form_data.dart';
 class AuthProvider extends GetConnect {
   @override
   void onInit() {
@@ -53,5 +54,9 @@ class AuthProvider extends GetConnect {
       "Authorization" : "Bearer $token"
     });
 
+  }
+
+  Future<Response> changePassword(PasswordFormData formData){
+    return post('/password/update', formData.toJson());
   }
 }
