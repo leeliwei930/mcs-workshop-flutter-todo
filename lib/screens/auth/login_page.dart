@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
     try {
       User user =  await authService.loginUsingPassword(
           loginFormData['identifier'], loginFormData['password']);
-      Get.off(() => Home());
+      Get.off(() => Home(), transition: Transition.rightToLeftWithFade);
 
     }  catch (error){
       toastException(error, context);

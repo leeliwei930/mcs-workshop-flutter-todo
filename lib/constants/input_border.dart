@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:todo/constants/default_theme.dart';
-kTodoAppInputBorder({label: String,  String? errorText, Widget? suffix,}) {
+kTodoAppInputBorder(BuildContext context, {label: String,  String? errorText, Widget? suffix, FocusNode? focusNode}) {
   return InputDecoration(
       contentPadding: EdgeInsets.all(10),
       labelText: label,
       errorText: errorText,
-      labelStyle: TextStyle(
+      labelStyle: (focusNode?.hasPrimaryFocus ?? false) ? TextStyle(
           color: accentColor,
-      ),
+      ) : Theme.of(context).inputDecorationTheme.labelStyle,
       suffixIconConstraints: BoxConstraints(
           minHeight: 15,
           minWidth: 15
@@ -19,7 +19,7 @@ kTodoAppInputBorder({label: String,  String? errorText, Widget? suffix,}) {
       focusedBorder: OutlineInputBorder(
 
           borderSide: BorderSide(
-            color: primaryColor,
+            color: accentColor,
           ),
           borderRadius: BorderRadius.all(Radius.circular(2.5)),
 
@@ -37,11 +37,7 @@ kTodoAppInputBorder({label: String,  String? errorText, Widget? suffix,}) {
         borderRadius: BorderRadius.all(Radius.circular(2.5))
     ),
     enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: accentColor,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(2.5))
-      ),
-      floatingLabelBehavior: FloatingLabelBehavior.always
+    ),
+    floatingLabelBehavior: FloatingLabelBehavior.always
   );
 }

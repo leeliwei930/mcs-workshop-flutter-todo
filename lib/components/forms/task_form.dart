@@ -6,7 +6,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/models/task.dart';
-
+import 'package:get/get.dart';
 class TaskForm extends StatefulWidget {
   final String submitButtonText;
   final Function? onSubmit;
@@ -45,6 +45,15 @@ class _TaskFormState extends State<TaskForm> {
       );
     }
 
+    this.value.titleFocusNode.addListener(() {setState(() {
+
+    });});
+    this.value.descriptionFocusNode.addListener(() {setState(() {
+
+    });});
+    this.value.dueDateFocusNode.addListener(() {setState(() {
+
+    });});
   }
   @override
   Widget build(BuildContext context) {
@@ -60,15 +69,21 @@ class _TaskFormState extends State<TaskForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
+                  textInputAction: TextInputAction.next,
                   enabled: !widget.isLoading,
                   onSaved: (val){
                     value.title = val ?? "";
                   },
                   validator: (val){
-
                     var titleValidator = MultiValidator([
-                      RequiredValidator(errorText: 'Title field is required'),
-                      LengthRangeValidator(min: 3, max: 255, errorText: "Title field is must be between 3 to 255 characters."),
+                      RequiredValidator(errorText: 'field_required'.trParams({
+                        "name" : "title".tr
+                      }) ?? ""),
+                      LengthRangeValidator(min: 3, max: 255, errorText: "field_range".trParams({
+                        "name" : "title".tr.capitalizeFirst!,
+                        "min" : "3",
+                        "max" : "255"
+                      }) ?? ""),
                     ]);
                     var isValid = titleValidator.isValid(val);
                     this.hasFieldsError = !isValid;
@@ -76,34 +91,37 @@ class _TaskFormState extends State<TaskForm> {
                   },
                   initialValue:  value.title,
                   cursorColor: accentColor,
-                  focusNode: FocusNode(
-                      canRequestFocus: false
-                  ),
-                  decoration: kTodoAppInputBorder(label: "Title", errorText:  widget.formError?.first("title"))
+                  focusNode: value.titleFocusNode,
+                  decoration: kTodoAppInputBorder(context, label: "title".tr, errorText:  widget.formError?.first("title"), focusNode: value.titleFocusNode),
+                  onFieldSubmitted: (_){
+                    FocusScope.of(context).requestFocus(value.descriptionFocusNode);
+                  },
                 ),
                 SizedBox(height: 15,),
                 TextFormField(
+                    textInputAction: TextInputAction.next,
                     enabled: !widget.isLoading,
                     minLines: 5,
                     maxLines: 5,
+                    focusNode: value.descriptionFocusNode,
+
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     onSaved: (val){
                       value.description = val;
                     },
                     validator: (val) {
-
                       var descriptionValidator =  MultiValidator([
-                        MaxLengthValidator(65535, errorText: "Description cannot be over 65535 characters.")
+                        MaxLengthValidator(65535, errorText: "field_max".trParams({
+                          "name" : "description".tr.capitalizeFirst!,
+                          "max" : "65535"
+                        }) ?? "")
                       ]);
                       this.hasFieldsError = !descriptionValidator.isValid(val);
                       return descriptionValidator.call(val ?? "");
                     },
                     cursorColor: accentColor,
                     initialValue: value.description,
-                    focusNode: FocusNode(
-                        canRequestFocus: false
-                    ),
-                    decoration: kTodoAppInputBorder(label: "Description", errorText: widget.formError?.first("description"))
+                    decoration: kTodoAppInputBorder(context, label: "description".tr, errorText: widget.formError?.first("description"), focusNode: value.descriptionFocusNode,)
                 ),
               Row(
                 children: [
@@ -113,21 +131,24 @@ class _TaskFormState extends State<TaskForm> {
                     onChanged: (val){
                       setState(() {
                         this.hasDueDate = val;
-
                       });
                     },
 
                   ),
-                  Text("Set a due date for this task")
+                  Text("set_due_date".trParams({
+                    "type" : "task".tr
+                  }) ?? "")
                 ],
               ),
                 if(hasDueDate) DateTimeField(
+                  textInputAction: TextInputAction.next,
                   enabled: !widget.isLoading,
+                  focusNode: value.dueDateFocusNode,
                   initialValue: value.dueDate ,
                   onSaved: (val){
                     value.dueDate = val;
                   },
-                  decoration: kTodoAppInputBorder(label: "Due At"),
+                  decoration: kTodoAppInputBorder(context, label: "due_at".tr, focusNode: value.dueDateFocusNode,),
                   format: DateFormat.yMEd().add_jms(),
                   validator: (DateTime? datetime){
                     if(widget.formError != null){
@@ -171,7 +192,9 @@ class _TaskFormState extends State<TaskForm> {
                             }
                           },
                         ),
-                        Text("Mark this task as complete")
+                        Text("mark_as_completed".trParams({
+                          "type" : "task".tr
+                        }) ?? "")
                       ],
                     );
                   },

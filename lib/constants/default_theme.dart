@@ -20,6 +20,6 @@ ThemeData lightTheme =  ThemeData(
     style: ElevatedButton.styleFrom(
       primary: accentColor,
     ),
-  )
+  ),
 
 );

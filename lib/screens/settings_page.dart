@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:todo/components/app_banner.dart';
-import 'package:todo/components/brand/app_title.dart';
+
 import 'package:get/get.dart';
 import 'package:todo/components/cards/user_profile.dart';
-import 'package:todo/components/countdown_button.dart';
+
 import 'package:todo/components/forms/password_form.dart';
 import 'package:todo/components/navigations/subpage_app_bar.dart';
 import 'package:todo/constants/text_styles.dart';
@@ -13,6 +12,7 @@ import 'package:todo/models/password_form_data.dart';
 import 'package:todo/models/user.dart';
 import 'package:todo/screens/auth/login_page.dart';
 import 'package:todo/services/auth_service.dart';
+import 'package:todo/services/setting_service.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -22,7 +22,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   late final AuthService authService;
-
+  late final SettingService settingService;
   FormError? formError;
 
   @override
@@ -30,6 +30,7 @@ class _SettingsPageState extends State<SettingsPage> {
     // TODO: implement initState
     super.initState();
     this.authService = Get.find<AuthService>();
+    this.settingService = Get.find<SettingService>();
   }
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                     bool? logout = await showDialog(context: context, builder: (BuildContext context){
                       return AlertDialog(
-                        title: Text("logout".tr),
+                        title: Text("log_out".tr),
                         content: Text("logout_message".tr),
                         actions: [
                           TextButton(
@@ -96,6 +97,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),),
               SizedBox(height:20),
               Text("language".tr, style: kSectionTitle,),
+              buildLanguageSettingsForm(context)
             ],
           ),
         ),
@@ -117,5 +119,30 @@ class _SettingsPageState extends State<SettingsPage> {
       toastException(error, context);
     }
 
+  }
+
+  Widget buildLanguageSettingsForm(BuildContext context){
+    return Column(
+      children: [
+        RadioListTile<String>(
+            groupValue: settingService.languageCode,
+            title: Text("based_on_system_lang".tr),
+            value: "system",
+            onChanged: (newLang) => settingService.updateLanguage(Locale(newLang!))
+        ),
+        RadioListTile<String>(
+            groupValue: settingService.languageCode,
+            title: Text("中文"),
+            value: "zh",
+            onChanged: (newLang) => settingService.updateLanguage(Locale(newLang!))
+        ),
+        RadioListTile<String>(
+            groupValue: settingService.languageCode,
+            title: Text("English Global"),
+            value: "en",
+            onChanged: (newLang) => settingService.updateLanguage(Locale(newLang!))
+        )
+      ],
+    );
   }
 }
