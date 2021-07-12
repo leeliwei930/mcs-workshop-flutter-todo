@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'password_form_data.g.dart';
-@JsonSerializable()
+@JsonSerializable(
+  ignoreUnannotated: true
+)
 class PasswordFormData {
 
   @JsonKey(name: "password")

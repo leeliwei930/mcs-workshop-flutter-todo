@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'task.g.dart';
-@JsonSerializable()
+@JsonSerializable(
+  ignoreUnannotated: true
+)
 class Task {
 
   @JsonKey(name: "id", fromJson: _parseIDToString)
