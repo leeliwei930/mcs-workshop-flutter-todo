@@ -37,6 +37,7 @@ class RegisterFormData {
     this.emailFocusNode = FocusNode();
     this.passwordFocusNode = FocusNode();
     this.fullnameFocusNode = FocusNode();
+    this.confirmPasswordFocusNode = FocusNode();
   }
 
   factory RegisterFormData.fromJson(Map<String, dynamic> json) => _$RegisterFormDataFromJson(json);

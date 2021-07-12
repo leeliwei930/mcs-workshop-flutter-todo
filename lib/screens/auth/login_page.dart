@@ -10,6 +10,7 @@ import 'package:todo/components/forms/login_form.dart';
 import 'package:todo/constants/text_styles.dart';
 import 'package:todo/exceptions/toast_exception.dart';
 import 'package:todo/models/user.dart';
+import 'package:todo/screens/auth/register_page.dart';
 import 'package:todo/services/auth_service.dart';
 
 import '../home.dart';
@@ -47,13 +48,25 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: Container(
             padding: EdgeInsets.all(15),
-            child:  Obx(() => LoginForm(
-              isLoading: authService.isLoading(),
-              formKey: formKey,
-              onSubmit: (data) async {
-                await this.onLogin(data);
-              },
-            ),)
+            child:  Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() => LoginForm(
+                  isLoading: authService.isLoading(),
+                  formKey: formKey,
+                  onSubmit: (data) async {
+                    await this.onLogin(data);
+                  },
+                ),),
+                TextButton(
+                    onPressed: () => Get.to(
+                        RegisterPage(),
+                        transition: Transition.rightToLeftWithFade
+                    ),
+                    child: Text("register_new_account".tr.toUpperCase()))
+              ],
+            )
           ),
         ),
       ),

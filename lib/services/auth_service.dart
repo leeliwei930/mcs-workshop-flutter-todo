@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:todo/controllers/auth_provider.dart';
 import 'package:todo/exceptions/form_exception.dart';
-import 'package:todo/exceptions/form_exception.dart';
+import 'package:todo/models/register_form_data.dart';
 import 'package:todo/models/password_form_data.dart';
 import 'package:todo/models/user.dart';
 
@@ -17,6 +17,8 @@ class AuthService extends GetxService {
   RxBool isAuthenticated = false.obs;
   RxBool isLoading = false.obs;
   RxBool isUpdatePasswordLoading = false.obs;
+  RxBool isRegisterLoading = false.obs;
+
   @override
   Future<AuthService> onInit()  async {
       this.secureStore =  new FlutterSecureStorage();
@@ -129,6 +131,28 @@ class AuthService extends GetxService {
         this.isUpdatePasswordLoading.value = false;
         return Future.error(error);
       }
+  }
 
+
+  Future<User> registerUsingEmail(RegisterFormData data) async {
+    try {
+      this.isRegisterLoading.value = true;
+      Response response = await authProvider.registerUsingEmail(data);
+      if(response.isOk){
+        User user = User.fromJson(response.body['user']);
+        this.isRegisterLoading.value = false;
+        return Future.value(user);
+      } else if(response.statusCode ==  HttpStatus.badRequest){
+        FormException exception = FormException("validation_exception");
+        exception.formError.record(response.body['data']['errors']);
+        throw exception;
+      }
+
+      throw GetHttpException("server_error");
+
+    } catch (error) {
+      this.isRegisterLoading.value = false;
+      return Future.error(error);
+    }
   }
 }

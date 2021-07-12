@@ -8,7 +8,8 @@ class RegisterForm extends StatefulWidget {
   final RegisterFormData? initialValue;
   final bool isLoading;
   final Function? onSubmit;
-  RegisterForm({Key? key, this.initialValue, this.isLoading = false, this.onSubmit}) : super(key: key);
+  final String submitText;
+  RegisterForm({Key? key, this.initialValue, this.isLoading = false, this.onSubmit, this.submitText = "create_account"}) : super(key: key);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -30,6 +31,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return Form(
       key: _formKey,
       child: Column(
+
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
@@ -61,6 +63,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 focusNode: formData.fullnameFocusNode
             ),
           ),
+          SizedBox(height: 15,),
           TextFormField(
             enabled: !widget.isLoading,
             textInputAction: TextInputAction.next,
@@ -90,6 +93,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 focusNode: formData.usernameFocusNode
             ),
           ),
+          SizedBox(height: 15,),
           TextFormField(
             enabled: !widget.isLoading,
             textInputAction: TextInputAction.next,
@@ -111,6 +115,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 focusNode: formData.emailFocusNode
             ),
           ),
+          SizedBox(height: 15,),
           TextFormField(
             enabled: !widget.isLoading,
             obscureText: true,
@@ -135,6 +140,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 focusNode: formData.passwordFocusNode
             ),
           ),
+          SizedBox(height: 15,),
           TextFormField(
             enabled: !widget.isLoading,
             obscureText: true,

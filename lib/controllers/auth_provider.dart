@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:todo/models/register_form_data.dart';
 import 'package:todo/models/password_form_data.dart';
 class AuthProvider extends GetConnect {
   @override
@@ -39,13 +40,9 @@ class AuthProvider extends GetConnect {
     return post('/auth/local', body);
   }
 
-  Future<Response> registerUsingEmail({username: String, email: String, password: String}) async {
-    Map<String, String> body = {
-      "username" : username,
-      "email" : email,
-      "password" : password
-    };
-    return post('/auth/local/register', body);
+  Future<Response> registerUsingEmail(RegisterFormData data) async {
+
+    return post('/auth/local/register', data.toJson());
   }
 
   Future<Response> getUserUsingToken(String token){

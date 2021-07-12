@@ -25,7 +25,10 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Flex(
               direction: Axis.vertical,
               children: [
-                  RegisterForm(),
+                  Container(
+                    padding: EdgeInsets.all(15),
+                    child: RegisterForm(),
+                  )
               ],
             ),
           )

@@ -12,6 +12,10 @@ Map<String, String> enUS =  <String, String>{
   "language" : "LANGUAGE",
 
   "please_login" : "Please Login",
+
+  // register new account
+  "register_new_account" : "Create new account",
+  // logout
   "log_out" : "LOG OUT",
   "logout_message" : "Are you sure you want to logout?",
   "yes" : "YES",
@@ -49,6 +53,7 @@ Map<String, String> enUS =  <String, String>{
   "email" : "Email",
   "password" : "Password",
   "confirmPassword" : "Password confirmation",
+  "create_account" : "Create Account",
   // generic validation error
   "form_validation_exception" : "There are a few validation errors in your form field, please correct it and submit again.",
   "field_required" : "@name field is required",
