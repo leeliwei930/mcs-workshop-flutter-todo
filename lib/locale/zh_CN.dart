@@ -1,4 +1,4 @@
-Map<String, String> enUS =  <String, String>{
+Map<String, String> zhCN =  <String, String>{
   "brand_title" : "Todo.",
   "please_login" : "Login",
 
@@ -84,5 +84,5 @@ Map<String, String> enUS =  <String, String>{
 
   // settings
   "based_on_system_lang" : "Based on System Language",
-  "settings" : "Settings"
+  "settings" : "设定"
 };

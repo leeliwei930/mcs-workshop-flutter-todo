@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:form_field_validator/form_field_validator.dart';
 import 'package:todo/components/countdown_button.dart';
 import 'package:get/get.dart';
 import 'package:todo/constants/input_border.dart';
@@ -47,6 +48,12 @@ class _PasswordFormState extends State<PasswordForm> {
                 },
                 enabled: !widget.isLoading,
                 keyboardType: TextInputType.text,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: MultiValidator([
+                  RequiredValidator(errorText: "field_required".trParams({
+                    "name" : "current_password".tr
+                  }) ?? ""),
+                ]),
                 decoration: kTodoAppInputBorder(
                     context,
                     label: "current_password".tr,
@@ -64,9 +71,22 @@ class _PasswordFormState extends State<PasswordForm> {
               enabled: !widget.isLoading,
               keyboardType: TextInputType.visiblePassword,
               obscureText: true,
-
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              validator: MultiValidator([
+                RequiredValidator(errorText: "field_required".trParams({
+                  "name" : "password".tr
+                }) ?? ""),
+                LengthRangeValidator(min: 8, max: 30, errorText: "field_range".trParams({
+                  "name" : "password".tr,
+                  "min" : "8",
+                  "max" : "30"
+                }) ?? "")
+              ]),
               onSaved: (val){
                 formData.newPassword = val ?? "";
+              },
+              onChanged: (val){
+                formData.newPassword = val;
               },
               decoration: kTodoAppInputBorder(
                 context,
@@ -88,9 +108,14 @@ class _PasswordFormState extends State<PasswordForm> {
               onSaved: (val){
                 formData.confirmPassword = val ?? "";
               },
+              validator: (val) => MatchValidator(errorText: "field_not_match".trParams({
+                "base" : "password".tr,
+                "target" : "confirm_new_password".tr
+              }) ?? "field_not_match").validateMatch(val ?? "", formData.newPassword),
               onFieldSubmitted: (_){
                 FocusScope.of(context).unfocus();
               },
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               autocorrect: false,
               obscureText: true,
               decoration: kTodoAppInputBorder(

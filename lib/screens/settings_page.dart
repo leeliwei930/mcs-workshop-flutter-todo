@@ -37,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar:  SubPageAppBar(
         toolbarHeight: MediaQuery.of(context).size.height * .15,
-        title: "Settings",
+        title: "settings".tr,
         onBack: (){
           Get.back();
         },
