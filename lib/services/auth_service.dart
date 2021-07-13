@@ -79,12 +79,19 @@ class AuthService extends GetxService {
     this.isLoading.value = true;
     try {
       Response response = await this.authProvider.login(identifier: identifier, password: password);
+
       if(response.isOk){
         User user = User.fromJson(response.body['user']);
         await this.saveToken(response.body['jwt']);
         this.user = user.obs;
         this.isAuthenticated.value = true;
         this.isLoading.value = false;
+        String? existingJWT = await this.getExistingJWT();
+        if(existingJWT != null){
+          this.authProvider.setHttpAuthorizationHeader(existingJWT);
+
+        }
+
         return Future.value(user);
       }
       throw GetHttpException("incorrect_account_credentials");
@@ -112,14 +119,18 @@ class AuthService extends GetxService {
   }
 
   Future<User> changePassword(PasswordFormData formData) async {
-      try {
+
+    try {
+
         this.isUpdatePasswordLoading.value = true;
+
         Response response = await this.authProvider.changePassword(formData);
         if(response.isOk){
           User user = User.fromJson(response.body['user']);
-          this.saveToken(response.body['jwt']);
+          await this.saveToken(response.body['jwt']);
           this.user.value = user;
           this.isUpdatePasswordLoading.value = false;
+
           return Future.value(user);
         } else if(response.statusCode ==  HttpStatus.badRequest){
           FormException exception = FormException("validation_exception");

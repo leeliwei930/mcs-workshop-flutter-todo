@@ -23,11 +23,11 @@ class FormError {
   }
 
   // grab the first error
-  String first(String fieldname){
+  String? first(String fieldname){
     if(this._error.containsKey(fieldname)){
       return this._error[fieldname][0];
     }
-    return "";
+    return null;
   }
 }
 

@@ -43,5 +43,7 @@ class RegisterFormData {
   factory RegisterFormData.fromJson(Map<String, dynamic> json) => _$RegisterFormDataFromJson(json);
   Map<String, dynamic> toJson() => _$RegisterFormDataToJson(this);
 
-
+  String toString() {
+    return this.toJson().toString();
+  }
 }

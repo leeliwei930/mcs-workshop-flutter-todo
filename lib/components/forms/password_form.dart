@@ -50,7 +50,7 @@ class _PasswordFormState extends State<PasswordForm> {
                 decoration: kTodoAppInputBorder(
                     context,
                     label: "current_password".tr,
-                    errorText:  widget.formError?.first("password").tr,
+                    errorText:  widget.formError?.first("password")?.tr,
                     focusNode: formData.passwordFocusNode
                 ),
                 onFieldSubmitted: (_){
@@ -71,7 +71,7 @@ class _PasswordFormState extends State<PasswordForm> {
               decoration: kTodoAppInputBorder(
                 context,
                 label: "new_password".tr,
-                errorText: widget.formError?.first("newPassword").tr,
+                errorText: widget.formError?.first("newPassword")?.tr,
                 focusNode: formData.newPasswordFocusNode
               ),
               onFieldSubmitted: (_){
@@ -96,7 +96,7 @@ class _PasswordFormState extends State<PasswordForm> {
               decoration: kTodoAppInputBorder(
                 context,
                 label: "confirm_new_password".tr,
-                errorText: widget.formError?.first("confirmPassword").tr,
+                errorText: widget.formError?.first("confirmPassword")?.tr,
                 focusNode: formData.confirmPasswordFocusNode
               ),
             ),

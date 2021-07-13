@@ -54,13 +54,19 @@ Map<String, String> enUS =  <String, String>{
   "password" : "Password",
   "confirmPassword" : "Password confirmation",
   "create_account" : "Create Account",
+  "fresh_register" : "Don't have an account?",
+  "register_success" : "Your account has been registered, please login.",
+  // register validation error message
+  "email_taken" : "The email is used by someone.",
+  "username_taken" : "The username is used by someone.",
+  "password_required" : "The password field is required.",
   // generic validation error
   "form_validation_exception" : "There are a few validation errors in your form field, please correct it and submit again.",
   "field_required" : "@name field is required",
   "field_range" : "@name field must between @min to @max characters.",
   "field_max" : "@name field cannot be over @max characters.",
   "field_not_match" : "The @base field doesn't match with the @target field.",
-
+  "field_email_invalid" : "This field required a valid form of email address.",
   // password validation from backend
   "current_password_required" : "The current password is required",
   "new_password_required" : "The new password is required",

@@ -18,7 +18,8 @@ class AuthProvider extends GetConnect {
   }
 
   void setHttpAuthorizationHeader(String token){
-    httpClient.addRequestModifier((Request request) async {
+    this.httpClient.addRequestModifier((Request request) async {
+
       // Set the header
       request.headers['Authorization'] = "Bearer $token";
       return request;
@@ -26,7 +27,7 @@ class AuthProvider extends GetConnect {
   }
 
   void unsetHttpAuthorizationHeader(){
-    httpClient.addRequestModifier((Request request) async {
+    this.httpClient.addRequestModifier((Request request) async {
       // Set the header
       request.headers.remove('Authorization');
       return request;

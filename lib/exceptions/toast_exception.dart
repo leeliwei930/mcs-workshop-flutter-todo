@@ -8,6 +8,11 @@ import 'package:todo/exceptions/form_exception.dart';
 import 'package:get/get.dart';
 void toastException(Object error, BuildContext context){
   if(error is SocketException || error is GetHttpException) {
+    if(error.toString() == "incorrect_account_credentials"){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("incorrect_account_credentials".tr)));
+      return;
+    }
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("network_error".tr)));
   } else if (error is TimeoutException) {

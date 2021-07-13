@@ -60,11 +60,18 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),),
                 TextButton(
-                    onPressed: () => Get.to(
-                        RegisterPage(),
-                        transition: Transition.rightToLeftWithFade
-                    ),
-                    child: Text("register_new_account".tr.toUpperCase()))
+                    onPressed: () async {
+                      String? result = await Get.to(
+                          () => RegisterPage(),
+                          transition: Transition.rightToLeftWithFade,
+                          duration: Duration(milliseconds: 500)
+                      );
+                      if(result != null) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("register_success")));
+                      }
+                    },
+                    child: Text("fresh_register".tr)
+                )
               ],
             )
           ),

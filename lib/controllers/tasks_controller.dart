@@ -105,6 +105,7 @@ class TasksController extends GetxController {
       if(response.isOk) {
         Task task = Task.fromJson(response.body);
         this.updateTaskLoading.value = false;
+        this.fetchAllTasks(showLoadingIndicator: false);
         return Future.value(task);
       } else if(response.statusCode ==  HttpStatus.badRequest){
         FormException exception = FormException("validation_exception");

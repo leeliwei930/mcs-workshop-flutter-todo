@@ -24,7 +24,6 @@ class _TaskFormState extends State<TaskForm> {
 
   late Task value;
   bool hasDueDate = false;
-  bool hasFieldsError = false;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -69,26 +68,22 @@ class _TaskFormState extends State<TaskForm> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 TextFormField(
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
                   textInputAction: TextInputAction.next,
                   enabled: !widget.isLoading,
                   onSaved: (val){
                     value.title = val ?? "";
                   },
-                  validator: (val){
-                    var titleValidator = MultiValidator([
-                      RequiredValidator(errorText: 'field_required'.trParams({
-                        "name" : "title".tr
-                      }) ?? ""),
-                      LengthRangeValidator(min: 3, max: 255, errorText: "field_range".trParams({
-                        "name" : "title".tr.capitalizeFirst!,
-                        "min" : "3",
-                        "max" : "255"
-                      }) ?? ""),
-                    ]);
-                    var isValid = titleValidator.isValid(val);
-                    this.hasFieldsError = !isValid;
-                    return titleValidator.call(val ?? "");
-                  },
+                  validator: MultiValidator([
+                    RequiredValidator(errorText: 'field_required'.trParams({
+                      "name" : "title".tr
+                    }) ?? ""),
+                    LengthRangeValidator(min: 3, max: 255, errorText: "field_range".trParams({
+                      "name" : "title".tr.capitalizeFirst!,
+                      "min" : "3",
+                      "max" : "255"
+                    }) ?? ""),
+                  ]),
                   initialValue:  value.title,
                   cursorColor: accentColor,
                   focusNode: value.titleFocusNode,
@@ -100,25 +95,21 @@ class _TaskFormState extends State<TaskForm> {
                 SizedBox(height: 15,),
                 TextFormField(
                     textInputAction: TextInputAction.next,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     enabled: !widget.isLoading,
                     minLines: 5,
                     maxLines: 5,
                     focusNode: value.descriptionFocusNode,
 
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     onSaved: (val){
                       value.description = val;
                     },
-                    validator: (val) {
-                      var descriptionValidator =  MultiValidator([
-                        MaxLengthValidator(65535, errorText: "field_max".trParams({
-                          "name" : "description".tr.capitalizeFirst!,
-                          "max" : "65535"
-                        }) ?? "")
-                      ]);
-                      this.hasFieldsError = !descriptionValidator.isValid(val);
-                      return descriptionValidator.call(val ?? "");
-                    },
+                    validator: MultiValidator([
+                      MaxLengthValidator(65535, errorText: "field_max".trParams({
+                        "name" : "description".tr.capitalizeFirst!,
+                        "max" : "65535"
+                      }) ?? "")
+                    ]),
                     cursorColor: accentColor,
                     initialValue: value.description,
                     decoration: kTodoAppInputBorder(context, label: "description".tr, errorText: widget.formError?.first("description"), focusNode: value.descriptionFocusNode,)
@@ -148,13 +139,14 @@ class _TaskFormState extends State<TaskForm> {
                   onSaved: (val){
                     value.dueDate = val;
                   },
-                  decoration: kTodoAppInputBorder(context, label: "due_at".tr, focusNode: value.dueDateFocusNode,),
+                  decoration: kTodoAppInputBorder(
+                      context,
+                      label: "due_at".tr,
+                      focusNode: value.dueDateFocusNode,
+                      errorText:  widget.formError?.first("due_date")
+                  ),
                   format: DateFormat.yMEd().add_jms(),
-                  validator: (DateTime? datetime){
-                    if(widget.formError != null){
-                      return widget.formError!.first("due_date");
-                    }
-                  },
+
                   onShowPicker: (context, currentValue) async {
                     final date = await showDatePicker(
                       context: context,
@@ -213,9 +205,8 @@ class _TaskFormState extends State<TaskForm> {
                     ),
                   ) : Text(widget.submitButtonText),
 
-                  onPressed: hasFieldsError || widget.isLoading ? null :  (){
+                  onPressed:  widget.isLoading ? null :  (){
                     setState(() {
-
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
                         if(widget.onSubmit != null){
@@ -223,11 +214,6 @@ class _TaskFormState extends State<TaskForm> {
                             value.dueDate = null;
                           }
                           widget.onSubmit!(value) ;
-                        }
-                      } else {
-                        this.hasFieldsError = true;
-                        if(widget.onSubmitFailed != null){
-                          widget.onSubmitFailed!() ;
                         }
                       }
                     });

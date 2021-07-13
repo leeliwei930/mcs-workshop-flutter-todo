@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:todo/constants/input_border.dart';
+import 'package:todo/exceptions/form_exception.dart';
 import 'package:todo/models/register_form_data.dart';
 import 'package:get/get.dart';
 class RegisterForm extends StatefulWidget {
@@ -9,7 +10,10 @@ class RegisterForm extends StatefulWidget {
   final bool isLoading;
   final Function? onSubmit;
   final String submitText;
-  RegisterForm({Key? key, this.initialValue, this.isLoading = false, this.onSubmit, this.submitText = "create_account"}) : super(key: key);
+  final GlobalKey<FormState>? formKey;
+  final FormError? formError;
+  RegisterForm({
+    Key? key, this.initialValue, this.isLoading = false, this.onSubmit, this.submitText = "create_account", this.formKey, this.formError}) : super(key: key);
 
   @override
   _RegisterFormState createState() => _RegisterFormState();
@@ -18,12 +22,23 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   late RegisterFormData formData;
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late GlobalKey<FormState> _formKey;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    if(widget.formKey != null){
+      this._formKey = widget.formKey!;
+    } else {
+      this._formKey =  GlobalKey<FormState>();
+    }
     this.formData = widget.initialValue ?? RegisterFormData();
+
+    formData.fullnameFocusNode.addListener(() { setState(() {});});
+    formData.usernameFocusNode.addListener(() { setState(() {});});
+    formData.emailFocusNode.addListener(() { setState(() {});});
+    formData.passwordFocusNode.addListener(() { setState(() {});});
+    formData.confirmPasswordFocusNode.addListener(() { setState(() {});});
   }
 
   @override
@@ -35,6 +50,7 @@ class _RegisterFormState extends State<RegisterForm> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: !widget.isLoading,
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.text,
@@ -60,11 +76,13 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: kTodoAppInputBorder(
                 context,
                 label: "fullname".tr,
-                focusNode: formData.fullnameFocusNode
+                focusNode: formData.fullnameFocusNode,
+                errorText: widget.formError?.first("fullname")
             ),
           ),
           SizedBox(height: 15,),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: !widget.isLoading,
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
@@ -90,11 +108,13 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: kTodoAppInputBorder(
                 context,
                 label: "username".tr,
-                focusNode: formData.usernameFocusNode
+                focusNode: formData.usernameFocusNode,
+                errorText: widget.formError?.first("username")
             ),
           ),
           SizedBox(height: 15,),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: !widget.isLoading,
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.emailAddress,
@@ -102,6 +122,11 @@ class _RegisterFormState extends State<RegisterForm> {
             initialValue: formData.email,
             focusNode: formData.emailFocusNode,
             validator: MultiValidator([
+              EmailValidator(errorText: "field_email_invalid".tr),
+              RequiredValidator(errorText: "field_required".trParams({
+                "name" : "email".tr
+              }) ?? ""),
+
             ]),
             onSaved: (val){
               this.formData.email = val ?? "";
@@ -112,36 +137,52 @@ class _RegisterFormState extends State<RegisterForm> {
             decoration: kTodoAppInputBorder(
                 context,
                 label: "email".tr,
-                focusNode: formData.emailFocusNode
+                focusNode: formData.emailFocusNode,
+                errorText: widget.formError?.first("email")
+
             ),
           ),
           SizedBox(height: 15,),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: !widget.isLoading,
             obscureText: true,
+
             textInputAction: TextInputAction.next,
             keyboardType: TextInputType.text,
             autocorrect: false,
             initialValue: formData.password,
             focusNode: formData.passwordFocusNode,
             validator: MultiValidator([
-
+              RequiredValidator(errorText: "field_required".trParams({
+                "name" : "password".tr
+              }) ?? ""),
+              LengthRangeValidator(min: 8, max: 30, errorText: "field_range".trParams({
+                "name" : "password".tr,
+                "min" : "8",
+                "max" : "30"
+              }) ?? "")
             ]),
             onSaved: (val){
               this.formData.password = val ?? "";
             },
-            onFieldSubmitted: (val){
+            onChanged: (val){
               this.formData.password = val;
+            },
+            onFieldSubmitted: (val){
               FocusScope.of(context).requestFocus(formData.confirmPasswordFocusNode);
             },
             decoration: kTodoAppInputBorder(
                 context,
                 label: "password".tr,
-                focusNode: formData.passwordFocusNode
+                focusNode: formData.passwordFocusNode,
+                errorText: widget.formError?.first("password")
+
             ),
           ),
           SizedBox(height: 15,),
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             enabled: !widget.isLoading,
             obscureText: true,
             textInputAction: TextInputAction.next,
@@ -157,15 +198,23 @@ class _RegisterFormState extends State<RegisterForm> {
                 .validateMatch(formData.password, confirmPassword ?? ""),
             onSaved: (val){
               this.formData.confirmPassword = val ?? "";
+              this.submitForm();
             },
             decoration: kTodoAppInputBorder(
                 context,
                 label: "confirmPassword".tr,
-                focusNode: formData.passwordFocusNode
+                focusNode: formData.confirmPasswordFocusNode,
+
             ),
-          )
+          ),
         ],
       ),
     );
+  }
+
+  void submitForm() {
+      if(this.widget.onSubmit != null){
+        this.widget.onSubmit!(this.formData);
+      }
   }
 }
