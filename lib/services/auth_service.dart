@@ -21,25 +21,35 @@ class AuthService extends GetxService {
 
   @override
   Future<AuthService> onInit()  async {
+      // initialise Flutter secure storage
       this.secureStore =  new FlutterSecureStorage();
+      // instantiate the auth provider
       this.authProvider = AuthProvider();
+      // init auth provider
       this.authProvider.onInit();
 
+      // check for existing JWT token that stored by flutter_secure_storage
       String? existingToken = await this.getExistingJWT();
+      // temp tokenValidState
       bool tokenIsValid = false;
 
       if(existingToken != null){
+        // try to exchange user info from JWT with server
         await getUserFromToken(existingToken).then((User user){
+          // if exchange success, set the user to auth service
           this.user = user.obs;
+          // mark token as valid
           tokenIsValid = true;
         }).catchError((error){
           tokenIsValid = false;
+          // clear off the previous store token
           this.clearToken();
         });
       }
 
       if(tokenIsValid){
         this.isAuthenticated.value = true;
+        // inject http authorization header with JWT in it into authProvider http client instance
         this.authProvider.setHttpAuthorizationHeader(existingToken!);
       }
       return this;
@@ -55,6 +65,7 @@ class AuthService extends GetxService {
 
   }
 
+  // read the JWT token
   Future<String?> getExistingJWT() async {
     return await this.secureStore.read(key: "todo_jwt");
   }
@@ -66,6 +77,7 @@ class AuthService extends GetxService {
         User user = User.fromJson(response.body);
         return Future.value(user);
       }
+      // throw session expired error
       throw GetHttpException("session_expired");
     } catch (exception) {
       this.isAuthenticated.value = false;

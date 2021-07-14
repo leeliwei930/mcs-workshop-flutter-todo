@@ -23,15 +23,16 @@ class TaskForm extends StatefulWidget {
 class _TaskFormState extends State<TaskForm> {
 
   late Task value;
-  bool hasDueDate = false;
+  bool hasDueDate = false; // use to control due_date DateTimeFormField dynamically
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // if the initial value is set
     if(widget.initialValue != null){
-
+      // bring the initialValue that is set from the widget constructor to current state
       this.value = widget.initialValue!;
       this.hasDueDate =  value.dueDate != null;
 
@@ -44,6 +45,8 @@ class _TaskFormState extends State<TaskForm> {
       );
     }
 
+    // Focus Node listener, update the focus node UI state when
+    // text field focus state changed.
     this.value.titleFocusNode.addListener(() {setState(() {
 
     });});
@@ -114,23 +117,21 @@ class _TaskFormState extends State<TaskForm> {
                     initialValue: value.description,
                     decoration: kTodoAppInputBorder(context, label: "description".tr, errorText: widget.formError?.first("description"), focusNode: value.descriptionFocusNode,)
                 ),
-              Row(
-                children: [
-                  Switch(
-
-                    value: hasDueDate,
-                    onChanged: (val){
-                      setState(() {
-                        this.hasDueDate = val;
-                      });
-                    },
-
-                  ),
-                  Text("set_due_date".trParams({
-                    "type" : "task".tr
-                  }) ?? "")
-                ],
-              ),
+                Row(
+                  children: [
+                    Switch(
+                      value: hasDueDate,
+                      onChanged: (val){
+                        setState(() {
+                          this.hasDueDate = val;
+                        });
+                      },
+                    ),
+                    Text("set_due_date".trParams({
+                      "type" : "task".tr
+                    }) ?? "")
+                  ],
+                ),
                 if(hasDueDate) DateTimeField(
                   textInputAction: TextInputAction.next,
                   enabled: !widget.isLoading,
@@ -177,7 +178,7 @@ class _TaskFormState extends State<TaskForm> {
                     return Row(
                       children: [
                         Switch(
-                        value: field.value ?? false,
+                          value: field.value ?? false,
                           onChanged: (bool value) {
                             if(!widget.isLoading){
                               field.didChange(value);
@@ -194,7 +195,6 @@ class _TaskFormState extends State<TaskForm> {
 
                 ),
                 ElevatedButton(
-
                   style: Theme.of(context).elevatedButtonTheme.style,
                   child: widget.isLoading? SizedBox(
                     height: 15,
@@ -207,12 +207,18 @@ class _TaskFormState extends State<TaskForm> {
 
                   onPressed:  widget.isLoading ? null :  (){
                     setState(() {
+                      // validate the form
                       if(_formKey.currentState!.validate()){
+                        // if form is valid save it
                         _formKey.currentState!.save();
+                        // perform a onSubmit callback if it is not null
                         if(widget.onSubmit != null){
+                          // if there is no due date set
                           if(!this.hasDueDate){
+                            // set the value of task due date to null
                             value.dueDate = null;
                           }
+                          // callback with submit value argument
                           widget.onSubmit!(value) ;
                         }
                       }

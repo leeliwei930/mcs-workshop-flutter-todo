@@ -189,12 +189,14 @@ class _HomeState extends State<Home> {
         await deleteTask(task);
       },
       onUpdate: () async {
+        // wait for value return while the user close the EditTask page
         String? result = await Get.to(
           () => EditTask( task: task, ),
           transition: Transition.rightToLeftWithFade,
           duration: Duration(milliseconds: 500)
         );
 
+        // if the task is successfully updated result will be have the value of task_updated_success
         if(result == "task_updated_success"){
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(result!.tr),)

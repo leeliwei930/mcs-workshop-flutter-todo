@@ -14,6 +14,7 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   late GlobalKey _formKey;
+  // default form data
   Map<String, String> loginFormData = {
     "identifier" : "",
     "password" : ""
@@ -22,6 +23,7 @@ class _LoginFormState extends State<LoginForm> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // set the form key from the widget constructor
     this._formKey = widget.formKey;
 
   }
@@ -34,7 +36,7 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
-            initialValue: "johnsmith",
+            initialValue: "johnsmith", // initial value for testing
             readOnly: widget.isLoading,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
@@ -69,6 +71,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void emitOnSubmit(){
+    // trigger on submit to parent
     if(this.widget.onSubmit != null){
       this.widget.onSubmit!(this.loginFormData);
     }

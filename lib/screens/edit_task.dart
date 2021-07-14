@@ -28,6 +28,7 @@ class _EditTaskState extends State<EditTask> {
   void submitForm(Task task) async   {
     try {
       await controller.updateTask(task.id, task);
+      // fallback to previous page with the result of update success
       Get.back(result: "task_updated_success");
     } catch (error) {
       if(error is FormException){
