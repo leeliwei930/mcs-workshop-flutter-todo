@@ -21,10 +21,10 @@ Map<String, String> zhCN =  <String, String>{
   "yes" : "YES",
   "no" : "NO",
   "hello" : "Hello.",
-  "task_summary" : "You have @uncompletedTaskCount uncompleted task, and  @completedTaskCount completed tasks.",
+  "task_summary" : "You have @incompleteTaskCount incomplete task, and  @completedTaskCount completed tasks.",
   "all" : "All",
   "completed" : "Completed",
-  "uncompleted" : "Uncompleted",
+  "incomplete" : "Uncompleted",
 
   "create_new_task" : "Create A new Task",
   "create_task" : "Create Task",

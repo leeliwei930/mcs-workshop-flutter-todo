@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:todo/constants/default_theme.dart';
 
 part 'task.g.dart';
 @JsonSerializable(
@@ -43,5 +44,30 @@ class Task {
 
   String toString(){
     return this.toJson().toString();
+  }
+
+  bool get isDue {
+    return dueDate?.isAfter(DateTime.now()) ?? false;
+  }
+
+  Color get stateColor {
+    if(isDue && !completed){
+      return dangerColor;
+    } else if(!completed) {
+      return warningColor;
+    } else {
+      return primaryColor;
+    }
+  }
+
+
+  String get state {
+    if(isDue && !completed){
+      return "task_due";
+    } else if(!completed) {
+      return "task_incomplete";
+    } else {
+      return "task_complete";
+    }
   }
 }

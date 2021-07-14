@@ -32,11 +32,9 @@ class _TaskListItemState extends State<TaskListItem> {
   }
 
   void closeSlide(BuildContext context){
-    if(Slidable.of(context) != null){
       setState(() {
-        Slidable.of(context)!.close();
+        Slidable.of(context)?.close();
       });
-    }
   }
   @override
   Widget build(BuildContext context) {

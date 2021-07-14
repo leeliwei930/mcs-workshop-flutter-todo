@@ -14,6 +14,7 @@ import 'package:todo/models/task.dart';
 import 'package:todo/screens/create_task.dart';
 import 'package:todo/screens/edit_task.dart';
 import 'package:todo/screens/settings_page.dart';
+import 'package:todo/screens/view_task.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -63,7 +64,13 @@ class _HomeState extends State<Home> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(onPressed: ()=> Get.to( () => SettingsPage()), icon: Icon(Icons.settings, color: Colors.white,))
+                    IconButton(
+                        onPressed: ()=> Get.to(
+                          () => SettingsPage(),
+                          transition: Transition.rightToLeftWithFade,
+                        ),
+                        icon: Icon(Icons.settings, color: Colors.white,)
+                    )
                   ],
                 )
               ],
@@ -75,7 +82,7 @@ class _HomeState extends State<Home> {
                     style: kGreetingTextStyle.copyWith(color: Color(0xFF6366F1)),
                     children: [
                       TextSpan(
-                        text: "You have ${tasksController.uncompletedTasks.length} uncompleted task, and  ${tasksController.completedTasks.length} completed tasks.",
+                        text: "You have ${tasksController.incompleteTasks.length} incomplete task, and  ${tasksController.completedTasks.length} completed tasks.",
                         style: kGreetingTextStyle.copyWith(color: Colors.black),
 
                       )
@@ -163,6 +170,9 @@ class _HomeState extends State<Home> {
       title: task.title ,
       completed: task.completed,
       dueDate: task.dueDate?.toString() ?? null,
+      onBrowse: (){
+        Get.to(() => ViewTask(task: task));
+      },
       onChanged: (bool newVal)   {
          bool initialValue = task.completed;
          task.completed = newVal;
@@ -245,7 +255,7 @@ class _HomeState extends State<Home> {
       case 0:
         return tasksController.tasks;
       case 1:
-        return tasksController.uncompletedTasks;
+        return tasksController.incompleteTasks;
       default:
         return tasksController.completedTasks;
     }

@@ -23,7 +23,7 @@ class TasksController extends GetxController {
     this._provider = TasksProvider().onInit();
   }
 
-  RxList<Task> get  uncompletedTasks => tasks.where((element) => !element.completed).toList().obs;
+  RxList<Task> get  incompleteTasks => tasks.where((element) => !element.completed).toList().obs;
   RxList<Task> get  completedTasks => tasks.where((element) => element.completed).toList().obs;
 
 

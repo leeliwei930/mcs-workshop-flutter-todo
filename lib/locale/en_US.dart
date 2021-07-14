@@ -21,10 +21,10 @@ Map<String, String> enUS =  <String, String>{
   "yes" : "YES",
   "no" : "NO",
   "hello" : "Hello.",
-  "task_summary" : "You have @uncompletedTaskCount uncompleted task, and  @completedTaskCount completed tasks.",
+  "task_summary" : "You have @incompleteTaskCount incomplete task, and  @completedTaskCount completed tasks.",
   "all" : "All",
   "completed" : "Completed",
-  "uncompleted" : "Uncompleted",
+  "incomplete" : "Uncompleted",
 
   "create_new_task" : "Create A new Task",
   "create_task" : "Create Task",
@@ -47,6 +47,12 @@ Map<String, String> enUS =  <String, String>{
   "set_due_date" : "Set a due date for this @type.",
   "mark_as_completed" : "Mark this @type as complete",
   "task" : "task",
+  // view task page
+  "task_due" : "Task overdue",
+  "task_incomplete" : "Incomplete",
+  "task_complete" : "Completed",
+
+
   // register form
   "fullname" : "Fullname",
   "username" : "Username",

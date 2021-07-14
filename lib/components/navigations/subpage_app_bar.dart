@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:todo/constants/text_styles.dart';
 import 'package:todo/constants/default_theme.dart';
+import 'package:get/get.dart';
 class SubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double toolbarHeight;
   final Icon leadingIcon;
   final String title;
   final String leadingTitle;
   final Function? onBack;
-
+  final Widget? bottom;
   const SubPageAppBar({
     Key? key,
     this.toolbarHeight = kToolbarHeight,
     this.leadingIcon = const Icon(Icons.arrow_back, color: accentColor,),
     this.title = "",
     this.onBack,
-    this.leadingTitle = "BACK"
+    this.leadingTitle = "BACK",
+    this.bottom
   }) : super(key: key);
 
   @override
@@ -33,14 +35,12 @@ class SubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         child: SafeArea(
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextButton(
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.all(0),
-                  ),
+
                   onPressed: () => Navigator.pop(context),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -51,9 +51,23 @@ class SubPageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(5                                                                                                                                                                                                                                                                          ),
-                  child: Text(title, style: kAppTitleTextStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(title, style: kAppTitleTextStyle.copyWith(fontSize: 20, fontWeight: FontWeight.bold),),
+                      if(bottom != null)
+                        Builder(
+                          builder: (BuildContext context){
+                            return Padding(
+                              padding: EdgeInsets.symmetric(vertical: 8),
+                              child: bottom,
+                            );
+                          },
+                        )
+                    ],
+                  ),
                 )
               ],
             ),
